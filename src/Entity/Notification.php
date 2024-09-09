@@ -36,6 +36,19 @@ class Notification
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    #ORM\PrePersist
+    public function setCreatedAtValue(): void
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    #ORM\PreUpdate
+    public function setUpdatedAtValue(): void
+    {
+        $this->updated_at = new \DateTimeImmutable();
+    }
+
     public function getId(): ?int
     {
         return $this->id;
