@@ -30,6 +30,7 @@ class Category
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+        $this->icon = 'icon-default.png';
     }
 
     public function getId(): ?int
