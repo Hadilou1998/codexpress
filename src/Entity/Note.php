@@ -54,8 +54,8 @@ class Note
 
     public function __construct()
     {
-        $this->notifications = new ArrayCollection();
-        $this->setPublic(false);
+        $this->notifications = new ArrayCollection(); // Initialisation du tableau de notifications
+        $this->is_public = false; // Initialisation du booléan à false
     }
 
     #[ORM\PrePersist]
