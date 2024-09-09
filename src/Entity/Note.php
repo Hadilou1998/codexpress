@@ -56,6 +56,7 @@ class Note
     {
         $this->notifications = new ArrayCollection(); // Initialisation du tableau de notifications
         $this->is_public = false; // Initialisation du booléan à false
+        $this->title = 'Kakarot'; // Initialisation du titre à "Kakarot"
     }
 
     #[ORM\PrePersist]
