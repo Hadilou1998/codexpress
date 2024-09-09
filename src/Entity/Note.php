@@ -55,16 +55,17 @@ class Note
     public function __construct()
     {
         $this->notifications = new ArrayCollection();
+        $this->setPublic(false);
     }
 
-    #ORM\PrePersist
+    #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
         $this->created_at = new \DateTimeImmutable();
         $this->setUpdatedAtValue();
     }
 
-    #ORM\PreUpdate
+    #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
         $this->updated_at = new \DateTimeImmutable();
