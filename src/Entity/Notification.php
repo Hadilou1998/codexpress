@@ -49,6 +49,12 @@ class Notification
         $this->updated_at = new \DateTimeImmutable();
     }
 
+    public function __construct()
+    {
+        $this->type = 'info'; // type de notification par défaut est "info"
+        $this->archived = false; // les notifications ne sont pas archivées par défaut
+    }
+
     public function getId(): ?int
     {
         return $this->id;
