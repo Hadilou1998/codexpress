@@ -19,21 +19,21 @@ class HomeController extends AbstractController
     #[Route('/profile', name: 'app_profile')]
     public function profile(): Response
     {
-        return $this->render('home/profile.html.twig', [
+        return $this->render('user/profile.html.twig', [
         ]);
     }
 
     #[Route('/note', name: 'app_note')]
     public function show(): Response
     {
-        return $this->render('home/note.html.twig', [
+        return $this->render('note/note.html.twig', [
         ]);
     }
 
     #[Route('/category', name: 'app_category')]
     public function category(): Response
     {
-        return $this->render('home/category.html.twig', [
+        return $this->render('category/category.html.twig', [
         ]);
     }
 }
