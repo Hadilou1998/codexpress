@@ -23,16 +23,12 @@ class HomeController extends AbstractController
         ]);
     }
 
-    
-
     #[Route('/note', name: 'app_note')]
     public function show(): Response
     {
         return $this->render('home/note.html.twig', [
         ]);
     }
-
-    
 
     #[Route('/category', name: 'app_category')]
     public function category(): Response
