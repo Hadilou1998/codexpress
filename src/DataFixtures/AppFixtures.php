@@ -69,12 +69,11 @@ class AppFixtures extends Fixture
             $note = new Note(); // Nouvel objet Note
             $note->setTitle($faker->sentence()); // Ajout du titre
             $note->setSlug($this->slug->slug($note->getTitle())); // Ajout du slug
-            $note->setContent($faker->paragraph()); // Ajout du contenu
-            $note->setPublic($faker->boolean()); // Ajout du statut public
-            $note->setViews($faker->numberBetween(0, 1000)); // Ajout du nombre de vues
+            $note->setContent($faker->paragraph(4, true)); // Ajout du contenu
+            $note->setPublic($faker->boolean(50)); // Ajout du statut public
+            $note->setViews($faker->numberBetween(100, 1000)); // Ajout du nombre de vues
             $note->setCreator($user); // Ajout de l'auteur
             $note->setCategory($category); // Ajout de la catégorie
-
         }
 
         $manager->flush();
