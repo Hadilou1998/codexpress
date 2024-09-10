@@ -48,15 +48,16 @@ class Note
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'notes')]
+    #[ORM\ManyToOne(inversedBy: 'notes', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
 
     public function __construct()
     {
         $this->notifications = new ArrayCollection(); // Initialisation du tableau de notifications
-        $this->is_public = false; // Initialisation du booléan à false
+        $this->is_public = false; // Initialisation du booléen à false
         $this->title = uniqid('note-'); // Initialisation du titre au GUID
+        $this->setCreatedAtValue(); // Call setCreatedAtValue method in the constructor
     }
 
     #[ORM\PrePersist]
