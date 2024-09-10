@@ -47,10 +47,13 @@ class AppFixtures extends Fixture
             'Java' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg',
         ];
 
+        $categoryArray = []; // Tableau nous servant à conserver les objets Category
+
         foreach ($categories as $title => $icon) {
             $category = new Category(); // Nouvel objet Category
             $category->setTitle($title); // Ajout du titre
             $category->setIcon($icon); // Ajout de l'icône
+            array_push($categoryArray, $category); // Ajout de l'objet à notre tableau
             $manager->persist($category); // Persiste l'objet
         }
 
@@ -73,7 +76,8 @@ class AppFixtures extends Fixture
             $note->setPublic($faker->boolean(50)); // Ajout du statut public
             $note->setViews($faker->numberBetween(100, 1000)); // Ajout du nombre de vues
             $note->setCreator($user); // Ajout de l'auteur
-            $note->setCategory($category); // Ajout de la catégorie
+            $note->setCategory($faker->randomElement($categoryArray)); // Ajout de la catégorie
+            $manager->persist($note); // Persiste l'objet
         }
 
         $manager->flush();
