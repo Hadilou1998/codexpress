@@ -6,9 +6,24 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Category;
 use Faker\Factory;
+use App\Entity\User;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    private $slug = null;
+    private $hash = null;
+
+    public function __construct(
+        private SluggerInterface $slugger,
+        private UserPasswordHasherInterface $hasher
+        )
+    {
+        $this->slug = $slugger;
+        $this->hash = $hasher;
+    }
+    
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
@@ -36,6 +51,18 @@ class AppFixtures extends Fixture
             $category->setTitle($title); // Ajout du titre
             $category->setIcon($icon); // Ajout de l'icône
             $manager->persist($category); // Persiste l'objet
+        }
+
+        // 10 utilisateurs
+        for ($i = 0; $i < 10; $i++) {
+            $username = $faker->userName(); // Génère un username aléatoire
+            $usernameFinal = $this->slug->slug($username); // Username en slug
+            $user = new User(); // Nouvel objet User
+            $user->setEmail($usernameFinal . $faker->freeEmailDomain); // Ajout de l'email
+            $user->setUsername($faker->userName()); // Ajout du nom d'utilisateur
+            $user->setPassword($this->hash->hashPassword($user, 'admin')); // Ajout du mot de passe
+            $user->setRoles(['ROLE_USER']); // Ajout du rôle
+            $manager->persist($user); // Persiste l'objet
         }
 
         $manager->flush();
