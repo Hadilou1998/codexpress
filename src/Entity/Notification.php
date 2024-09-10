@@ -52,8 +52,8 @@ class Notification
 
     public function __construct()
     {
-        $this->type = 'info'; // type de notification par défaut est "info"
-        $this->archived = false; // les notifications ne sont pas archivées par défaut
+        $this->type = 'info'; // type de notif par défaut est "info"
+        $this->archived = false; // les notifs ne sont pas archivés par défaut
     }
 
     public function getId(): ?int

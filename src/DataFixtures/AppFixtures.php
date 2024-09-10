@@ -2,14 +2,14 @@
 
 namespace App\DataFixtures;
 
-use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Persistence\ObjectManager;
-use App\Entity\Category;
 use Faker\Factory;
 use App\Entity\User;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\Category;
 use App\Entity\Note;
+use Doctrine\Persistence\ObjectManager;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 class AppFixtures extends Fixture
 {
@@ -19,18 +19,16 @@ class AppFixtures extends Fixture
     public function __construct(
         private SluggerInterface $slugger,
         private UserPasswordHasherInterface $hasher
-        )
-    {
+    ) {
         $this->slug = $slugger;
         $this->hash = $hasher;
     }
-    
+
     public function load(ObjectManager $manager): void
     {
         $faker = Factory::create('fr_FR');
-        
-        // Création des catégories
-        # Tableau contenant les catégories
+
+        // Création de catégories
         $categories = [
             'HTML' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain.svg',
             'CSS' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-plain.svg',
@@ -47,37 +45,45 @@ class AppFixtures extends Fixture
             'Java' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg',
         ];
 
-        $categoryArray = []; // Tableau nous servant à conserver les objets Category
+        $categoryArray = []; // Ce tableau nous servira pour conserver les objets Category
 
         foreach ($categories as $title => $icon) {
             $category = new Category(); // Nouvel objet Category
-            $category->setTitle($title); // Ajout du titre
-            $category->setIcon($icon); // Ajout de l'icône
-            array_push($categoryArray, $category); // Ajout de l'objet à notre tableau
-            $manager->persist($category); // Persiste l'objet
+            $category
+                ->setTitle($title) // Ajoute le titre
+                ->setIcon($icon) // Ajoute l'icone
+            ;
+
+            array_push($categoryArray, $category); // Ajout de l'objet
+            $manager->persist($category);
         }
 
         // 10 utilisateurs
         for ($i = 0; $i < 10; $i++) {
-            $username = $faker->userName(); // Génère un username aléatoire
+            $username = $faker->userName; // Génére un username aléatoire
             $usernameFinal = $this->slug->slug($username); // Username en slug
-            $user = new User(); // Nouvel objet User
-            $user->setEmail($usernameFinal . $faker->freeEmailDomain); // Ajout de l'email
-            $user->setUsername($faker->userName()); // Ajout du nom d'utilisateur
-            $user->setPassword($this->hash->hashPassword($user, 'admin')); // Ajout du mot de passe
-            $user->setRoles(['ROLE_USER']); // Ajout du rôle
-        }
+            $user =  new User();
+            $user
+                ->setEmail($usernameFinal . '@' . $faker->freeEmailDomain)
+                ->setUsername($username)
+                ->setPassword($this->hash->hashPassword($user, 'admin'))
+                ->setRoles(['ROLE_USER'])
+                ;
+            $manager->persist($user);
 
-        for ($j=0; $j < 10; $j++) {
-            $note = new Note(); // Nouvel objet Note
-            $note->setTitle($faker->sentence()); // Ajout du titre
-            $note->setSlug($this->slug->slug($note->getTitle())); // Ajout du slug
-            $note->setContent($faker->paragraph(4, true)); // Ajout du contenu
-            $note->setPublic($faker->boolean(50)); // Ajout du statut public
-            $note->setViews($faker->numberBetween(100, 1000)); // Ajout du nombre de vues
-            $note->setCreator($user); // Ajout de l'auteur
-            $note->setCategory($faker->randomElement($categoryArray)); // Ajout de la catégorie
-            $manager->persist($note); // Persiste l'objet
+            for ($j=0; $j < 10; $j++) { 
+                $note = new Note();
+                $note
+                    ->setTitle($faker->sentence())
+                    ->setSlug($this->slug->slug($note->getTitle()))
+                    ->setContent($faker->paragraphs(4, true))
+                    ->setPublic($faker->boolean(50))
+                    ->setViews($faker->numberBetween(100, 10000))
+                    ->setCreator($user)
+                    ->setCategory($faker->randomElement($categoryArray))
+                    ;
+                $manager->persist($note);
+            }
         }
 
         $manager->flush();

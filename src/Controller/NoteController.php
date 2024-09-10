@@ -9,21 +9,33 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class NoteController extends AbstractController
 {
+    /**
+     * /notes
+     * Route dédiée à l'affichage de toutes les notes
+     */
     #[Route('/notes', name: 'app_notes')]
-    public function notes(NoteRepository $notes): Response
+    public function all(NoteRepository $notes): Response
     {
-        return $this->render('home/notes.html.twig', [
-            'notes' => $notes->findAll()
+        return $this->render('note/all.html.twig', [
+            'notes' => $notes->findAll(),
         ]);
     }
-    #[Route('/notes?id=', name: 'app_note')]
-    public function note(): Response
+    
+    /**
+     * /note
+     * Route dédiée à l'affichage d'une seule note
+     */
+    #[Route('/note/{slug}', name: 'app_note')]
+    public function show(NoteRepository $notes, string $slug): Response
     {
-        return $this->render('home/note.html.twig', []);
+        return $this->render('note/show.html.twig', [
+            'note' => $notes->findBy(['slug' => $slug])
+        ]);
     }
-    #[Route('/my-notes', name: 'app_my_notes')]
-    public function myNotes(): Response
+    
+    #[Route('/my-notes', name: 'app_my-note')]
+    public function myNote(): Response
     {
-        return $this->render('home/my_notes.html.twig', []);
+        return $this->render('note/note.html.twig', []);
     }
 }

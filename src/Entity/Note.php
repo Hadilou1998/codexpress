@@ -17,10 +17,10 @@ class Note
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 80, nullable: true)]
+    #[ORM\Column(length: 80)]
     private ?string $title = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
@@ -48,15 +48,15 @@ class Note
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
 
-    #[ORM\ManyToOne(inversedBy: 'notes', cascade: ['persist'])]
+    #[ORM\ManyToOne(inversedBy: 'notes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
 
     public function __construct()
     {
-        $this->notifications = new ArrayCollection(); // Initialisation du tableau de notifications
-        $this->is_public = false; // Initialisation du booléen à false
-        $this->title = uniqid('note-'); // Initialisation du titre au GUID
+        $this->notifications = new ArrayCollection(); // initialisation du tableau de notifications
+        $this->is_public = false; // initialisation du booléen à false
+        $this->title = uniqid('note-'); // initialisation du titre au GUID
     }
 
     #[ORM\PrePersist]
@@ -82,7 +82,7 @@ class Note
         return $this->title;
     }
 
-    public function setTitle(?string $title): static
+    public function setTitle(string $title): static
     {
         $this->title = $title;
 
@@ -94,7 +94,7 @@ class Note
         return $this->slug;
     }
 
-    public function setSlug(?string $slug): static
+    public function setSlug(string $slug): static
     {
         $this->slug = $slug;
 

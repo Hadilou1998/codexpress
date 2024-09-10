@@ -41,7 +41,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Note>
      */
-    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'creator', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'creator', orphanRemoval: true)]
     private Collection $notes;
 
     #[ORM\Column]
@@ -67,6 +67,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->updated_at = new \DateTimeImmutable();
     }
+
 
     public function getId(): ?int
     {
