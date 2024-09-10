@@ -4,11 +4,13 @@ namespace App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Entity\Category;
 
 class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+        // Création des catégories
         # Tableau contenant les catégories
         $categories = [
             'HTML' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain.svg',
@@ -25,6 +27,13 @@ class AppFixtures extends Fixture
             'Markdown' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/markdown/markdown-original.svg',
             'Java' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg',
         ];
+
+        foreach ($categories as $title => $icon) {
+            $category = new Category(); // Nouvel objet Category
+            $category->setTitle($title); // Ajout du titre
+            $category->setIcon($icon); // Ajout de l'icône
+            $manager->persist($category); // Persiste l'objet
+        }
 
         $manager->flush();
     }
