@@ -7,6 +7,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: NotificationRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Notification
 {
     #[ORM\Id]
@@ -36,14 +37,14 @@ class Notification
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #ORM\PrePersist
+    #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {
         $this->created_at = new \DateTimeImmutable();
         $this->setUpdatedAtValue();
     }
 
-    #ORM\PreUpdate
+    #[ORM\PreUpdate]
     public function setUpdatedAtValue(): void
     {
         $this->updated_at = new \DateTimeImmutable();
