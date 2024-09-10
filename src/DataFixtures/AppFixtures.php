@@ -9,6 +9,7 @@ use Faker\Factory;
 use App\Entity\User;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use App\Entity\Note;
 
 class AppFixtures extends Fixture
 {
@@ -62,7 +63,18 @@ class AppFixtures extends Fixture
             $user->setUsername($faker->userName()); // Ajout du nom d'utilisateur
             $user->setPassword($this->hash->hashPassword($user, 'admin')); // Ajout du mot de passe
             $user->setRoles(['ROLE_USER']); // Ajout du rôle
-            $manager->persist($user); // Persiste l'objet
+        }
+
+        for ($j=0; $j < 10; $j++) {
+            $note = new Note(); // Nouvel objet Note
+            $note->setTitle($faker->sentence()); // Ajout du titre
+            $note->setSlug($this->slug->slug($note->getTitle())); // Ajout du slug
+            $note->setContent($faker->paragraph()); // Ajout du contenu
+            $note->setPublic($faker->boolean()); // Ajout du statut public
+            $note->setViews($faker->numberBetween(0, 1000)); // Ajout du nombre de vues
+            $note->setCreator($user); // Ajout de l'auteur
+            $note->setCategory($category); // Ajout de la catégorie
+
         }
 
         $manager->flush();
