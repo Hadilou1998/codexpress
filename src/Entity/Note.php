@@ -57,7 +57,6 @@ class Note
         $this->notifications = new ArrayCollection(); // Initialisation du tableau de notifications
         $this->is_public = false; // Initialisation du booléen à false
         $this->title = uniqid('note-'); // Initialisation du titre au GUID
-        $this->setCreatedAtValue(); // Call setCreatedAtValue method in the constructor
     }
 
     #[ORM\PrePersist]
