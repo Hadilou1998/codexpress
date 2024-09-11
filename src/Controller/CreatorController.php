@@ -19,6 +19,7 @@ class CreatorController extends AbstractController
     #[Route('/profile/edit', name: 'app_profile_edit', methods: ['GET', 'POST'])]
     public function edit(): Response
     {
+        $user = $this->getUser(); // Récupérer l'utilisateur authentifié
         return $this->render('creator/edit.html.twig', [
             'controller_name' => 'CreatorController',
         ]);
