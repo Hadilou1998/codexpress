@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello NoteController!{% endblock %}
+{% block title %}All public notes{% endblock %}
 
 {% block body %}
-    
+    <h1>All public notes</h1>
+    {{ dump(item) }}
+    <a href="{{ path('app_note_show', {'slug': item:slug}) }}">Show</a>
 {% endblock %}
