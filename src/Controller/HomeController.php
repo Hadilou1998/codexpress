@@ -16,12 +16,4 @@ class HomeController extends AbstractController
             'allNotes' => $nr->findBy(['is_public' => true], ['created_at' => 'DESC']),
         ]);
     }
-
-    #[Route('/{slug}', name: 'app_note_show')]
-    public function show(string $slug, NoteRepository $nr): Response
-    {
-        return $this->render('home/show.html.twig', [
-            'note' => $nr->findOneBySlug($slug),
-        ]);
-    }
 }
