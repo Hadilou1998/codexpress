@@ -34,7 +34,7 @@ class NoteController extends AbstractController
     ): Response {
         $creator = $user->findOneByUsername($username); // On recherche l'utilisateur
         return $this->render('home/user.html.twig', [
-            'creator' => $creator, // On récupère l'utilisateur
+            'creator' => $creator, // On envoie les données de l'utilisateur à la vue Twig
             'userNotes' => $creator->getNotes(), // On récupère les notes de l'utilisateur
         ]);
     }
