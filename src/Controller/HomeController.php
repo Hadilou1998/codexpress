@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/home', name: 'app_home', methods: ['GET'])]
+    #[Route('/', name: 'app_home', methods: ['GET'])]
     public function index(NoteRepository $nr): Response
     {
         $lastNotes = $nr->findBy([
