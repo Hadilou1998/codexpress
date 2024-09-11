@@ -8,11 +8,20 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class CategoryController extends AbstractController
 {
-    #[Route('/category', name: 'app_category')]
+    #[Route('/categories', name: 'app_categories')]
     public function index(): Response
     {
         return $this->render('category/category.html.twig', [
             'controller_name' => 'CategoryController',
+        ]);
+    }
+    
+    #[Route('/category/{title}', name: 'app_category')]
+    public function show($title): Response
+    {
+        return $this->render('category/category.html.twig', [
+            'controller_name' => 'CategoryController',
+            'title' => $title,
         ]);
     }
 }
