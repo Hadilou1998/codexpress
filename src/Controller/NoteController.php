@@ -6,12 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/notes')] // Suffixe pour les routes du controller
 class NoteController extends AbstractController
 {
-    #[Route('/note', name: 'app_note')]
-    public function index(): Response
+    #[Route('/', name: 'app_note_all')]
+    public function all(): Response
     {
-        return $this->render('note/index.html.twig', [
+        return $this->render('note/all.html.twig', [
             'controller_name' => 'NoteController',
         ]);
     }
