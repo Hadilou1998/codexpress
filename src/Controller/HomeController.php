@@ -12,8 +12,8 @@ class HomeController extends AbstractController
     #[Route('/', name: 'app_home', methods: ['GET'])]
     public function index(NoteRepository $nr): Response
     {
-        $lastNotes = $nr->findBy([
-            'is_public' => true], // on filtre les notes qui sont publiques
+        $lastNotes = $nr->findBy(
+            ['is_public' => true], // on filtre les notes qui sont publiques
             ['created_at' => 'DESC'], // on trie les notes par date de création
             6 // on affiche 6 notes
         );
