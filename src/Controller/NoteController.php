@@ -14,7 +14,7 @@ class NoteController extends AbstractController
     #[Route('/', name: 'app_note_all', methods: ['GET'])]
     public function all(NoteRepository $nr): Response
     {
-        return $this->render('home/all.html.twig', [
+        return $this->render('note/all.html.twig', [
             'allNotes' => $nr->findBy(['is_public' => true], ['created_at' => 'DESC']),
         ]);
     }
