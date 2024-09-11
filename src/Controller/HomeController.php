@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'app_note_all', methods: ['GET'])]
+    #[Route('/', name: 'app_note_all')]
     public function all(NoteRepository $nr): Response
     {
         return $this->render('home/index.html.twig', [
