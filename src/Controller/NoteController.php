@@ -36,6 +36,5 @@ class NoteController extends AbstractController
         return $this->render('home/show.html.twig', [
             'note' => $creator->getNotes(), // On récupère les notes de l'utilisateur
         ]);
-    }
-    
+    }   
 }
