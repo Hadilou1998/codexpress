@@ -22,7 +22,7 @@ class NoteController extends AbstractController
     #[Route('/{slug}', name: 'app_note_show', methods: ['GET'])]
     public function show(string $slug, NoteRepository $nr): Response
     {
-        return $this->render('home/show.html.twig', [
+        return $this->render('note/show.html.twig', [
             'note' => $nr->findOneBySlug($slug),
         ]);
     }
@@ -33,7 +33,7 @@ class NoteController extends AbstractController
         UserRepository $user, // On récupère le repository de l'entité User
     ): Response {
         $creator = $user->findOneByUsername($username); // On recherche l'utilisateur
-        return $this->render('home/user.html.twig', [
+        return $this->render('note/user.html.twig', [
             'creator' => $creator, // On envoie les données de l'utilisateur à la vue Twig
             'userNotes' => $creator->getNotes(), // On récupère les notes de l'utilisateur
         ]);
