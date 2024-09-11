@@ -13,7 +13,7 @@ class NoteController extends AbstractController
      * /notes
      * Route dédiée à l'affichage de toutes les notes
      */
-    #[Route('/notes/{username}', name: 'app_user_notes')]
+    #[Route('/notes', name: 'app_user_notes')]
     public function all(NoteRepository $notes): Response
     {
         return $this->render('note/all.html.twig', [
