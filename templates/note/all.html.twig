@@ -6,10 +6,6 @@
     <h1>All public notes</h1>
     {% for item in allNotes %}
         {{ dump(item) }}
-        {% set number = number + 1 %}
         <a href="{{ path('app_note_show', {'slug': item.slug}) }}">Show</a>
     {% endfor %}
-    <p class="text-7xl">
-        Il y a actutuellement {{ number }} notes publiques
-    </p>
 {% endblock %}
