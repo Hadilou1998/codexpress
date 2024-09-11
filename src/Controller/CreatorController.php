@@ -7,7 +7,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('AUTHENTIFICATED_FULLY')]
+#[IsGranted('IS_AUTHENTIFICATED_FULLY')]
 class CreatorController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile', methods: ['GET'])]
