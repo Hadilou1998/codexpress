@@ -18,7 +18,7 @@ class HomeController extends AbstractController
             6 // on affiche 6 notes
         );
         return $this->render('home/index.html.twig', [
-            'controller_name' => 'HomeController',
+            'lastNote' => $lastNotes, // on passe les notes à la vue Twig
         ]);
     }
 }
