@@ -10,15 +10,18 @@ use Symfony\Component\Routing\Attribute\Route;
 class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function index(NoteRepository $nr): Response
+    public function all(NoteRepository $nr): Response
     {
-        $lastNotes = $nr->findBy(
-            ['is_public' => true], // on filtre les notes qui sont publiques
-            ['created_at' => 'DESC'], // on trie les notes par date de création
-            6 // on affiche 6 notes
-        );
         return $this->render('home/index.html.twig', [
-            'lastNotes' => $lastNotes, // on passe les notes à la vue Twig
+            'allNotes' => $nr->findBy(['is_public' => true], ['created_at' => 'DESC']),
+        ]);
+    }
+
+    #[Route('/{slug}', name: 'app_note_show')]
+    public function show(string $slug, NoteRepository $nr): Response
+    {
+        return $this->render('home/show.html.twig', [
+            'note' => $nr->findOneBySlug($slug),
         ]);
     }
 }
