@@ -68,7 +68,7 @@ class AppFixtures extends Fixture
                 ->setUsername($username)
                 ->setPassword($this->hash->hashPassword($user, 'admin'))
                 ->setRoles(['ROLE_USER'])
-                ;
+                ->setImage($faker->imageUrl(640, 480, 'people', true));
             $manager->persist($user);
 
             for ($j=0; $j < 10; $j++) { 
