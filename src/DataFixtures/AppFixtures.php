@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
         $categories = [
             'HTML' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain.svg',
             'CSS' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-plain.svg',
-            'JavaScript' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-plain.svg',
+            'JS' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-plain.svg',
             'PHP' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-plain.svg',
             'SQL' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-plain.svg',
             'JSON' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/json/json-plain.svg',
@@ -62,7 +62,6 @@ class AppFixtures extends Fixture
         }
 
         $notesArray = []; // Initialisation du tableau pour stocker les notes
-        $usersArray = []; // Initialisation du tableau pour stocker les utilisateurs
 
         // 10 utilisateurs
         for ($i = 0; $i < 10; $i++) {
@@ -81,7 +80,7 @@ class AppFixtures extends Fixture
             for ($j=0; $j < 10; $j++) { 
                 $note = new Note();
                 $note
-                    ->setTitle($faker->sentence())
+                    ->setTitle($faker->sentence(3))
                     ->setSlug($this->slug->slug($note->getTitle()))
                     ->setContent($faker->paragraphs(4, true))
                     ->setPublic($faker->boolean(50))
@@ -101,70 +100,59 @@ class AppFixtures extends Fixture
             'LinkedIn' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-plain.svg',
         ];
 
-        $networksArray = []; // Ce tableau nous servira pour conserver les objets Networks table
+        // $networksArray = []; // Ce tableau nous servira pour conserver les objets Networks table
 
         foreach ($networks as $name => $url) {
             $network = new Network(); // Nouvel objet Network
             $network
                 ->setName($name) // Ajoute le titre
                 ->setUrl($url) // Ajoute l'url
-                ->setCreator($faker->randomElement($usersArray)) // Ajoute l'utilisateur
-            ;
+                ->setCreator($faker->randomElement($usersArray)); // Ajoute l'utilisateur
 
-            array_push($networksArray, $network); // Ajout de l'objet
+            // array_push($networksArray, $network); // Ajout de l'objet
             $manager->persist($network);
         }
 
-        // Création des enregistrements de la table notifications
+        // Création des enregistrements `notification`
         $notifications = [
-            'info'      => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/info/info-circle-solid.svg',
-            'success'   => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/check/check-circle-solid.svg',
-            'warning'   => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/exclamation/exclamation-circle-solid.svg',
-            'danger'    => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/exclamation/exclamation-circle-solid.svg',
-            'primary'   => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/info/info-circle-solid.svg',
-            'secondary' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/info/info-circle-solid.svg',
-            'light'     => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/info/info-circle-solid.svg',
-            'dark'      => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/info/info-circle-solid.svg',
+            'New note' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New comment' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New follower' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New message' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New notification' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',          
         ];
 
-        $notificationsArray = []; // Ce tableau nous servira pour conserver les objets Notifications table
-
-        foreach ($notifications as $type => $icon) {
+        // $notificationsArray = []; // Ce tableau nous servira pour conserver les objets Networks table
+        foreach ($notifications as $title => $url) {
             $notification = new Notification(); // Nouvel objet Notification
             $notification
-                ->setTitle($faker->sentence()) // Ajoute le titre
-                ->setContent($faker->paragraphs(4, true)) // Ajoute le contenu
-                ->setType($type) // Ajoute le type
-                ->setArchive(false) // Ajoute l'archive
-                ->setNote($faker->randomElement($notesArray)) // Ajoute la note
-            ;
-
-            array_push($notificationsArray, $notification); // Ajout de l'objet
+                ->setTitle($title) // Ajouter le titre
+                ->setContent($faker->paragraphs(4, true)) // Ajouter le contenu
+                ->setType($faker->randomElement(['info', 'success', 'warning', 'danger'])) // Ajouter le type
+                ->setArchive($faker->boolean(50)) // Ajouter le booléen
+                ->setNote($faker->randomElement($notesArray)); // Ajoute la note
             $manager->persist($notification);
         }
 
-        // Création des enregistrements de la table `like`
+        // Création des enregistrements `like`
         $likes = [
-            'like' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/thumbs-up/thumbs-up-solid.svg',
-            'dislike' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/thumbs-down/thumbs-down-solid.svg',
-            'love' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/heart/heart-solid.svg',
-            'haha' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/laugh/laugh-solid.svg',
-            'wow' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/surprise/surprise-solid.svg',
-            'sad' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sad-tear/sad-tear-solid.svg',
-            'angry' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/angry/angry-solid.svg',
+            'New like' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New comment' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New follower' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New message' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
+            'New notification' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
         ];
 
-        $likesArray = []; // Ce tableau nous servira pour conserver les objets Likes table
-
-        foreach ($likes as $type => $icon) {
+        // $likesArray = []; // Ce tableau nous servira pour conserver les objets Networks table
+        foreach ($likes as $title => $url) {
             $like = new Like(); // Nouvel objet Like
             $like
-                ->setNote($faker->randomElement($notesArray)) // Ajoute la note
-                ->setCreator($faker->randomElement($usersArray)) // Ajoute l'utilisateur
-            ;
-
-            array_push($likesArray, $like); // Ajout de l'objet
+                ->setNote($faker->randomElement($notesArray)) // Ajouter la note
+                ->setCreator($faker->randomElement($usersArray)); // Ajouter l'utilisateur
             $manager->persist($like);
         }
-    }
+
+
+        $manager->flush();
+    } 
 }
