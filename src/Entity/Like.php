@@ -15,7 +15,7 @@ class Like
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'note')]
-    private ?note $note = null;
+    private ?Note $note = null;
 
     #[ORM\ManyToOne(inversedBy: 'new_creator')]
     private ?User $creator = null;
@@ -25,12 +25,12 @@ class Like
         return $this->id;
     }
 
-    public function getNote(): ?note
+    public function getNote(): ?Note
     {
         return $this->note;
     }
 
-    public function setNote(?note $note): static
+    public function setNote(?Note $note): static
     {
         $this->note = $note;
 
