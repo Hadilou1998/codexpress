@@ -108,5 +108,21 @@ class AppFixtures extends Fixture
             array_push($networksArray, $network); // Ajout de l'objet
             $manager->persist($network);
         }
+
+        // Création des enregistrements de la table `like`
+        $notes = $manager->getRepository(Note::class)->findAll();
+        $users = $manager->getRepository(User::class)->findAll();
+
+        foreach ($notes as $note) {
+            $note->setLikes($faker->numberBetween(0, 100));
+            $manager->persist($note);
+            $user = $faker->randomElement($users);
+            $like = new Like();
+            $like->setNote($note)
+            ->setCreator($user);
+            $manager->persist($like);
+        }
+
+        $manager->flush();
     }
 }
