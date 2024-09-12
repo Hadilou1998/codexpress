@@ -6,6 +6,8 @@ use Faker\Factory;
 use App\Entity\User;
 use App\Entity\Category;
 use App\Entity\Note;
+use App\Entity\Network;
+use App\Entity\Like;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -80,12 +82,31 @@ class AppFixtures extends Fixture
                     ->setPublic($faker->boolean(50))
                     ->setViews($faker->numberBetween(100, 10000))
                     ->setCreator($user)
-                    ->setCategory($faker->randomElement($categoryArray))
-                    ;
+                    ->setCategory($faker->randomElement($categoryArray));
                 $manager->persist($note);
             }
         }
 
-        $manager->flush();
+        // Création des enregistrements `network`
+        $networks = [
+            'Twitter' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/twitter/twitter-original.svg',
+            'Facebook' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/facebook/facebook-original.svg',
+            'Instagram' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/instagram/instagram-original.svg',
+            'LinkedIn' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-plain.svg',
+        ];
+
+        $networksArray = []; // Ce tableau nous servira pour conserver les objets Networks table
+
+        foreach ($networks as $name => $url) {
+            $network = new Network(); // Nouvel objet Network
+            $network
+                ->setName($name) // Ajoute le titre
+                ->setUrl($url) // Ajoute l'url
+                ->setCreator($user) // Ajoute l'utilisateur
+            ;
+
+            array_push($networksArray, $network); // Ajout de l'objet
+            $manager->persist($network);
+        }
     }
 }
