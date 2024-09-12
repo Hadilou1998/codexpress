@@ -62,6 +62,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'creator')]
     private Collection $new_creator;
 
+    #[ORM\ManyToOne(inversedBy: 'notes')]
+    private ?Note $note = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
@@ -280,6 +286,25 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $newCreator->setCreator(null);
             }
         }
+
+        return $this;
+    }
+
+    public function setNotes(?Note $note): static
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

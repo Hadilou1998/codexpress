@@ -58,12 +58,19 @@ class Note
     #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'note')]
     private Collection $note;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'Notes')]
+    private Collection $notes;
+
     public function __construct()
     {
         $this->notifications = new ArrayCollection(); // initialisation du tableau de notifications
         $this->is_public = false; // initialisation du booléen à false
         $this->title = uniqid('note-'); // initialisation du titre au GUID
         $this->note = new ArrayCollection();
+        $this->notes = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -250,5 +257,13 @@ class Note
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getNotes(): Collection
+    {
+        return $this->notes;
     }
 }
