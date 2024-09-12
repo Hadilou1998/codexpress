@@ -52,11 +52,18 @@ class Note
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
 
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'note')]
+    private Collection $note;
+
     public function __construct()
     {
         $this->notifications = new ArrayCollection(); // initialisation du tableau de notifications
         $this->is_public = false; // initialisation du booléen à false
         $this->title = uniqid('note-'); // initialisation du titre au GUID
+        $this->note = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -211,6 +218,36 @@ class Note
     public function setCreator(?User $creator): static
     {
         $this->creator = $creator;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getNote(): Collection
+    {
+        return $this->note;
+    }
+
+    public function addNote(Like $note): static
+    {
+        if (!$this->note->contains($note)) {
+            $this->note->add($note);
+            $note->setNote($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNote(Like $note): static
+    {
+        if ($this->note->removeElement($note)) {
+            // set the owning side to null (unless already changed)
+            if ($note->getNote() === $this) {
+                $note->setNote(null);
+            }
+        }
 
         return $this;
     }

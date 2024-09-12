@@ -97,14 +97,14 @@ class Notification
         return $this;
     }
 
-    public function isArchived(): ?bool
+    public function isArchive(): ?bool
     {
         return $this->archived;
     }
 
-    public function setArchived(bool $archived): static
+    public function setArchive(bool $archive): static
     {
-        $this->archived = $archived;
+        $this->archived = $archive;
 
         return $this;
     }

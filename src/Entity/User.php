@@ -50,9 +50,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
 
+    /**
+     * @var Collection<int, Network>
+     */
+    #[ORM\OneToMany(targetEntity: Network::class, mappedBy: 'relation')]
+    private Collection $creator;
+
+    /**
+     * @var Collection<int, Like>
+     */
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'creator')]
+    private Collection $new_creator;
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
+        $this->creator = new ArrayCollection();
+        $this->new_creator = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -206,6 +220,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Network>
+     */
+    public function getCreator(): Collection
+    {
+        return $this->creator;
+    }
+
+    public function addCreator(Network $creator): static
+    {
+        if (!$this->creator->contains($creator)) {
+            $this->creator->add($creator);
+            $creator->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCreator(Network $creator): static
+    {
+        if ($this->creator->removeElement($creator)) {
+            // set the owning side to null (unless already changed)
+            if ($creator->getCreator() === $this) {
+                $creator->setCreator(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Like>
+     */
+    public function getNewCreator(): Collection
+    {
+        return $this->new_creator;
+    }
+
+    public function addNewCreator(Like $newCreator): static
+    {
+        if (!$this->new_creator->contains($newCreator)) {
+            $this->new_creator->add($newCreator);
+            $newCreator->setCreator($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNewCreator(Like $newCreator): static
+    {
+        if ($this->new_creator->removeElement($newCreator)) {
+            // set the owning side to null (unless already changed)
+            if ($newCreator->getCreator() === $this) {
+                $newCreator->setCreator(null);
+            }
+        }
 
         return $this;
     }

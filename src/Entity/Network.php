@@ -19,6 +19,15 @@ class Network
     #[ORM\Column(length: 255)]
     private ?string $url = null;
 
+    #[ORM\ManyToOne(inversedBy: 'creator')]
+    private ?User $creator = null;
+
+    public function __construct()
+    {
+        $this->name = uniqid('network-'); // initialisation du nom de la réseau
+        $this->url = uniqid('network-'); // initialisation de l'url du réseau
+    }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -47,4 +56,22 @@ class Network
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
+
+        return $this;
+    }
+
 }

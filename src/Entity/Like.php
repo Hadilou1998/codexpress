@@ -14,8 +14,38 @@ class Like
     #[ORM\Column]
     private ?int $id = null;
 
+    #[ORM\ManyToOne(inversedBy: 'note')]
+    private ?note $note = null;
+
+    #[ORM\ManyToOne(inversedBy: 'new_creator')]
+    private ?User $creator = null;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getNote(): ?note
+    {
+        return $this->note;
+    }
+
+    public function setNote(?note $note): static
+    {
+        $this->note = $note;
+
+        return $this;
+    }
+
+    public function getCreator(): ?User
+    {
+        return $this->creator;
+    }
+
+    public function setCreator(?User $creator): static
+    {
+        $this->creator = $creator;
+
+        return $this;
     }
 }
