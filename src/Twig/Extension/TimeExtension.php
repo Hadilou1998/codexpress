@@ -19,6 +19,14 @@ class TimeExtension extends AbstractExtension
         $now = new \DateTimeImmutable();
         $diff = $date->diff($now);
 
+        if ($diff->y > 0) {
+            return $diff->y . ' year' . ($diff->y > 1 ? 's' : '');
+        }
+
+        if ($diff->m > 0) {
+            return $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
+        }
+
         if ($diff->d > 0) {
             return $diff->d . ' day' . ($diff->d > 1 ? 's' : '');
         }
