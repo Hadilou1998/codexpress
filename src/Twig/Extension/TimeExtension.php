@@ -5,6 +5,9 @@ namespace App\Twig\Extension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
+/**
+ * extension Twig pour formater les dates
+ */
 class TimeExtension extends AbstractExtension
 {
     public function getFilters(): array
