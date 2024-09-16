@@ -6,10 +6,12 @@ use App\Form\NoteType;
 use App\Entity\Note;
 use App\Repository\NoteRepository;
 use App\Repository\UserRepository;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/notes')] // Suffixe pour les routes du controller
 class NoteController extends AbstractController
@@ -43,19 +45,24 @@ class NoteController extends AbstractController
     }
     
     #[Route('/new', name: 'app_note_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
-        $note = new Note(); // On crée une nouvelle note
-        $form = $this->createForm(NoteType::class, $note); // On crée le formulaire
+        $form = $this->createForm(NoteType::class); // On crée le formulaire
         $form->handleRequest($request); // On traite les données du formulaire
-
-        dd($form->getData()); // Dump and die pour voir les données du formulaire
 
         // Traitement du formulaire
         if ($form->isSubmitted() && $form->isValid()) {
-            $note->setSlug(); // On génère le slug
-            $note->setCreator($this->getUser()); // On récupère l'utilisateur connecté
-            $note->setCreatedAt(new \DateTimeImmutable()); // On récupère la date de création
+            $note = new Note(); // On crée une nouvelle note
+            $note
+                ->setTitle($form->get('title')->getData()) // On récupère le titre
+                ->setSlug($slugger->slug($note->getTitle())) // On génère le slug
+                ->setContent($form->get('content')->getData()) // On récupère le contenu
+                ->setPublic($form->get('is_public')->getData()) // On récupère la visibilité
+                ->setCategory($form->get('category')->getData()) // On récupère la catégorie
+                ->setCreator($form->get('creator')->getData()) // On récupère l'utilisateur connecté
+            ;
+            $em->persist($note); // On enregistre la note en base de données
+            $em->flush(); // On enregistre les données en base de données
 
             dd($note); // Dump and die pour voir les données de la note
 
