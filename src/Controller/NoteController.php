@@ -7,6 +7,7 @@ use App\Entity\Note;
 use App\Repository\NoteRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -42,11 +43,18 @@ class NoteController extends AbstractController
     }
     
     #[Route('/new', name: 'app_note_new', methods: ['GET', 'POST'])]
-    public function new(NoteRepository $nr): Response
+    public function new(Request $request): Response
     {
         $note = new Note(); // On crée une nouvelle note
         $form = $this->createForm(NoteType::class, $note); // On crée le formulaire
-        return $this->render('note/new.html.twig', [ 'noteForm' => $form ]); // On envoie le formulaire à la vue Twig
+        $form->handleRequest($request); // On traite les données du formulaire
+
+        dd($form->getData()); // Dump and die pour voir les données du formulaire
+
+        if ($form->isSubmitted() && $form->isValid()) {}
+        return $this->render('note/new.html.twig', [ 
+            'noteForm' => $form
+        ]); // On envoie le formulaire à la vue Twig
     }
 
     #[Route('/edit/{slug}', name: 'app_note_edit', methods: ['GET', 'POST'])]
