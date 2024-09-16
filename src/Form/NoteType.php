@@ -48,7 +48,7 @@ class NoteType extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'id',
             ])
-            ->add('author', EntityType::class, [
+            ->add('creator', EntityType::class, [
                 'class' => User::class,
                 'choice_label' => 'username',
             ])

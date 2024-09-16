@@ -51,7 +51,19 @@ class NoteController extends AbstractController
 
         dd($form->getData()); // Dump and die pour voir les données du formulaire
 
-        if ($form->isSubmitted() && $form->isValid()) {}
+        // Traitement du formulaire
+        if ($form->isSubmitted() && $form->isValid()) {
+            $note
+                ->setTitle($form->get('title')->getData()) // On récupère le titre du formulaire
+                ->setContent($form->get('content')->getData()) // On récupère le contenu du formulaire
+                ->setIsPublic($form->get('is_public')->getData()) // On récupère la case à cocher du formulaire
+                ->setCategory($form->get('category')->getData()) // On récupère la catégorie du formulaire
+                ->setCreator($form->get('creator')->getData()) // On récupère l'utilisateur connecté
+            ;
+
+            dd($note); // Dump and die pour voir les données de la note
+
+        }
         return $this->render('note/new.html.twig', [ 
             'noteForm' => $form
         ]); // On envoie le formulaire à la vue Twig
