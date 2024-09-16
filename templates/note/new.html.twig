@@ -4,6 +4,11 @@
     Add a new note
 {% endblock %}
 
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script>
+    <script>
+    </script>
+
 {% block body %}
     {{ form(noteForm) }}
 {% endblock %}
