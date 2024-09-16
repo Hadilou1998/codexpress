@@ -47,29 +47,29 @@ class NoteController extends AbstractController
     #[Route('/new', name: 'app_note_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
-        $form = $this->createForm(NoteType::class); // On crée le formulaire
-        $form->handleRequest($request); // On traite les données du formulaire
+        $form = $this->createForm(NoteType::class); // Chargement du formulaire
+        $form = $form->handleRequest($request); // Recuperation des données de la requête POST
 
-        // Traitement du formulaire
+        // Traitement des données
         if ($form->isSubmitted() && $form->isValid()) {
-            $note = new Note(); // On crée une nouvelle note
+            $note = new Note();
             $note
-                ->setTitle($form->get('title')->getData()) // On récupère le titre
-                ->setSlug($slugger->slug($note->getTitle())) // On génère le slug
-                ->setContent($form->get('content')->getData()) // On récupère le contenu
-                ->setPublic($form->get('is_public')->getData()) // On récupère la visibilité
-                ->setCategory($form->get('category')->getData()) // On récupère la catégorie
-                ->setCreator($form->get('creator')->getData()) // On récupère l'utilisateur connecté
+                ->setTitle($form->get('title')->getData())
+                ->setSlug($slugger->slug($note->getTitle()))
+                ->setContent($form->get('content')->getData())
+                ->setPublic($form->get('is_public')->getData())
+                ->setCategory($form->get('category')->getData())
+                ->setCreator($form->get('creator')->getData())
             ;
-            $em->persist($note); // On enregistre la note en base de données
-            $em->flush(); // On enregistre les données en base de données
+            $em->persist($note);
+            $em->flush();
 
-            dd($note); // Dump and die pour voir les données de la note
-
+            $this->addFlash('success', 'Note créée avec succès');
+            return $this->redirectToRoute('app_note_show', ['slug' => $note->getSlug()]); // On redirige vers la page de la note créée
         }
-        return $this->render('note/new.html.twig', [ 
+        return $this->render('note/new.html.twig', [
             'noteForm' => $form
-        ]); // On envoie le formulaire à la vue Twig
+        ]);
     }
 
     #[Route('/edit/{slug}', name: 'app_note_edit', methods: ['GET', 'POST'])]

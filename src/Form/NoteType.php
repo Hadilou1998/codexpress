@@ -8,6 +8,7 @@ use App\Entity\Category;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
@@ -43,7 +44,10 @@ class NoteType extends AbstractType
                 'help_attr' => ['class' => 'text-sm text-violet-600'],
 
             ])
-            ->add('is_public')
+            ->add('is_public', CheckboxType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
             ->add('category', EntityType::class, [
                 'class' => Category::class,
                 'choice_label' => 'id',
