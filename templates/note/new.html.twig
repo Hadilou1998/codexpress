@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello NoteController!{% endblock %}
+{% block title %}
+    Add a new note
+{% endblock %}
 
 {% block body %}
-    
+    {{ form(noteForm) }}
 {% endblock %}

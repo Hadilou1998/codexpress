@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Form\NoteType;
+use App\Entity\Note;
 use App\Repository\NoteRepository;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,7 +21,7 @@ class NoteController extends AbstractController
         ]);
     }
 
-    #[Route('/{slug}', name: 'app_note_show', methods: ['GET'])]
+    #[Route('/n/{slug}', name: 'app_note_show', methods: ['GET'])]
     public function show(string $slug, NoteRepository $nr): Response
     {
         return $this->render('note/show.html.twig', [
@@ -27,7 +29,7 @@ class NoteController extends AbstractController
         ]);
     }
 
-    #[Route('/{username}', name: 'app_note_user', methods: ['GET'])]
+    #[Route('/u/{username}', name: 'app_note_user', methods: ['GET'])]
     public function userNotes(
         string $username,
         UserRepository $user, // On récupère le repository de l'entité User
@@ -40,9 +42,11 @@ class NoteController extends AbstractController
     }
     
     #[Route('/new', name: 'app_note_new', methods: ['GET', 'POST'])]
-    public function new(string $slug, NoteRepository $nr): Response
+    public function new(NoteRepository $nr): Response
     {
-        return $this->render('note/new.html.twig', []);
+        $note = new Note(); // On crée une nouvelle note
+        $form = $this->createForm(NoteType::class, $note); // On crée le formulaire
+        return $this->render('note/new.html.twig', [ 'noteForm' => $form ]); // On envoie le formulaire à la vue Twig
     }
 
     #[Route('/edit/{slug}', name: 'app_note_edit', methods: ['GET', 'POST'])]
