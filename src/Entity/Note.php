@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -69,8 +70,6 @@ class Note
         $this->notifications = new ArrayCollection(); // initialisation du tableau de notifications
         $this->is_public = false; // initialisation du booléen à false
         $this->title = uniqid('note-'); // initialisation du titre au GUID
-        $this->note = new ArrayCollection();
-        $this->notes = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -108,9 +107,10 @@ class Note
         return $this->slug;
     }
 
-    public function setSlug(string $slug): static
+    public function setSlug(): static
     {
-        $this->slug = $slug;
+        $slugger = new SluggerInterface();
+        $this->slug = $slugger->slug($this->getTitle());
 
         return $this;
     }
