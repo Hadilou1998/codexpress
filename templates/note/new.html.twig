@@ -6,9 +6,9 @@
 
 {% block javascript %}
     <script src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script>
-    <script>
-    </script>
+{% endblock %}
 
 {% block body %}
+    <tinymce-editor api-key="YOUR_API_KEY" height="500" menubar="false" plugins="advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table code help wordcount" toolbar="undo redo | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | code" content_style="body { font-family:Helvetica,Arial,sans-serif; font-size:14px }">
     {{ form(noteForm) }}
 {% endblock %}
