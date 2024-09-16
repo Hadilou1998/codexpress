@@ -27,7 +27,7 @@ class NoteType extends AbstractType
                 'class' => User::class,
                 'choice_label' => 'id',
             ])
-            ->add('submit', SubmitType::class)
+            // ->add('submit', SubmitType::class)
         ;
     }
 
