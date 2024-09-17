@@ -24,7 +24,7 @@ class NoteController extends AbstractController
             10
         );
         return $this->render('note/all.html.twig', [
-            'notes' => $notes
+            'allNotes' => $notes
         ]);
     }
 
