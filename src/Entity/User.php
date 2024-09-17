@@ -6,7 +6,6 @@ use App\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -14,7 +13,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\Table(name: '`user`')]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 #[ORM\HasLifecycleCallbacks]
-#[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -53,32 +51,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updated_at = null;
 
     /**
-     * @var Collection<int, Network>
-     */
-    #[ORM\OneToMany(targetEntity: Network::class, mappedBy: 'relation')]
-    private Collection $creator;
-
-    /**
      * @var Collection<int, Like>
      */
-    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'creator')]
-    private Collection $new_creator;
+    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'creator', orphanRemoval: true)]
+    private Collection $likes;
 
-    #[ORM\ManyToOne(inversedBy: 'notes')]
-    private ?Note $note = null;
+    /**
+     * @var Collection<int, Network>
+     */
+    #[ORM\OneToMany(targetEntity: Network::class, mappedBy: 'creator', orphanRemoval: true)]
+    private Collection $networks;
 
-    #[ORM\Column(length: 255)]
-    private ?string $image = null;
-
-    #[ORM\Column]
-    private bool $isVerified = false;
+    /**
+     * @var Collection<int, Subscription>
+     */
+    #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'creator')]
+    private Collection $subscriptions;
 
     public function __construct()
     {
         $this->notes = new ArrayCollection();
-        $this->creator = new ArrayCollection();
-        $this->new_creator = new ArrayCollection();
-        $this->image = 'default.png';
+        $this->likes = new ArrayCollection();
+        $this->networks = new ArrayCollection();
+        $this->subscriptions = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -237,29 +232,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Network>
+     * @return Collection<int, Like>
      */
-    public function getCreator(): Collection
+    public function getLikes(): Collection
     {
-        return $this->creator;
+        return $this->likes;
     }
 
-    public function addCreator(Network $creator): static
+    public function addLike(Like $like): static
     {
-        if (!$this->creator->contains($creator)) {
-            $this->creator->add($creator);
-            $creator->setCreator($this);
+        if (!$this->likes->contains($like)) {
+            $this->likes->add($like);
+            $like->setCreator($this);
         }
 
         return $this;
     }
 
-    public function removeCreator(Network $creator): static
+    public function removeLike(Like $like): static
     {
-        if ($this->creator->removeElement($creator)) {
+        if ($this->likes->removeElement($like)) {
             // set the owning side to null (unless already changed)
-            if ($creator->getCreator() === $this) {
-                $creator->setCreator(null);
+            if ($like->getCreator() === $this) {
+                $like->setCreator(null);
             }
         }
 
@@ -267,62 +262,61 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection<int, Like>
+     * @return Collection<int, Network>
      */
-    public function getNewCreator(): Collection
+    public function getNetworks(): Collection
     {
-        return $this->new_creator;
+        return $this->networks;
     }
 
-    public function addNewCreator(Like $newCreator): static
+    public function addNetwork(Network $network): static
     {
-        if (!$this->new_creator->contains($newCreator)) {
-            $this->new_creator->add($newCreator);
-            $newCreator->setCreator($this);
+        if (!$this->networks->contains($network)) {
+            $this->networks->add($network);
+            $network->setCreator($this);
         }
 
         return $this;
     }
 
-    public function removeNewCreator(Like $newCreator): static
+    public function removeNetwork(Network $network): static
     {
-        if ($this->new_creator->removeElement($newCreator)) {
+        if ($this->networks->removeElement($network)) {
             // set the owning side to null (unless already changed)
-            if ($newCreator->getCreator() === $this) {
-                $newCreator->setCreator(null);
+            if ($network->getCreator() === $this) {
+                $network->setCreator(null);
             }
         }
 
         return $this;
     }
 
-    public function setNotes(?Note $note): static
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
     {
-        $this->note = $note;
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setCreator($this);
+        }
 
         return $this;
     }
 
-    public function getImage(): ?string
+    public function removeSubscription(Subscription $subscription): static
     {
-        return $this->image;
-    }
-
-    public function setImage(string $image): static
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function isVerified(): bool
-    {
-        return $this->isVerified;
-    }
-
-    public function setVerified(bool $isVerified): static
-    {
-        $this->isVerified = $isVerified;
+        if ($this->subscriptions->removeElement($subscription)) {
+            // set the owning side to null (unless already changed)
+            if ($subscription->getCreator() === $this) {
+                $subscription->setCreator(null);
+            }
+        }
 
         return $this;
     }

@@ -55,7 +55,7 @@
                 </div>
             </div>
             <div class="grid grid-cols-1 gap-4">
-                {% for item in creatorNotes %}
+                {#{% for item in creatorNotes %}
                     <a href="{{ path('app_note_show', {'slug': item.slug}) }}" class="flex flex-col p-4 mb-4 border rounded-md md:p-6">
                         <p class="mb-1 text-base font-semibold">{{ item.title|slice(0,22) }}...</p>
                         <p class="mb-2 text-sm text-slate-600">
@@ -63,7 +63,7 @@
                             Published {{ item.createdAt|time_diff }} ago.
                         </p>
                     </a>
-                {% endfor %}
+                {% endfor %}#}
             </div>
         </aside>
     </section>
