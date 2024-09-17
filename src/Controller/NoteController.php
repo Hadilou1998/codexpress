@@ -98,9 +98,7 @@ class NoteController extends AbstractController
             return $this->redirectToRoute('app_note_show', ['slug' => $note->getSlug()]); // On redirige vers la page de la note modifiée
         }
 
-        return $this->render('note/edit.html.twig', [ // On affiche la page de modification
-
-        ]);
+        return $this->render('note/edit.html.twig', ['noteForm' => $form]); // On affiche la page de modification
     }
 
     #[Route('/delete/{slug}', name: 'app_note_delete', methods: ['POST'])]
