@@ -27,9 +27,20 @@ class NoteController extends AbstractController
     #[Route('/n/{slug}', name: 'app_note_show', methods: ['GET'])]
     public function show(string $slug, NoteRepository $nr): Response
     {
-        return $this->render('note/show.html.twig', [
-            'note' => $nr->findOneBySlug($slug),
-        ]);
+        $note = $nr->findOneBySlug($slug);
+        if ($note === null) {
+            throw $this->createNotFoundException('Note not found');
+        } else {
+            if ($note->isPublic()) {
+                $creatorNotes = $nr->findByCreator($note->getCreator());
+                return $this->render('note/show.html.twig', [
+                    'note' => $note,
+                    'creatorNotes' => $creatorNotes,
+                ]);
+            } else {
+                throw $this->createAccessDeniedException('This note is private');
+            }
+        }
     }
 
     #[Route('/u/{username}', name: 'app_note_user', methods: ['GET'])]
