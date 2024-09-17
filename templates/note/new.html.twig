@@ -4,9 +4,15 @@
     Add a new note
 {% endblock %}
 
-{% block javascript %}
-{% endblock %}
-
 {% block body %}
-    {{ form(noteForm) }}
+{% if app.user %}
+    {# {{ include('components/access-denied.html.twig') }} #}
+    {% if app.user.email|length > 18 %}
+        {{ form(noteForm) }}
+    {% endif %}
+{% else %}
+    {# {{ include('components/access-denied.html.twig') }} #}
+    <!-- Je suis là -->
+    Access Denied
+{% endif %}
 {% endblock %}

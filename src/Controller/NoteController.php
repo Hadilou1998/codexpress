@@ -47,6 +47,11 @@ class NoteController extends AbstractController
     #[Route('/new', name: 'app_note_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
+        /*if (!$this->getUser()) {
+            $this->addFlash('error', 'Vous devez être connecté pour ajouter une note');
+            return $this->redirectToRoute('app_login');
+        }*/
+        
         $form = $this->createForm(NoteType::class); // Chargement du formulaire
         $form = $form->handleRequest($request); // Recuperation des données de la requête POST
 
