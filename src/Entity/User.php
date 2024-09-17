@@ -68,6 +68,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'creator')]
     private Collection $subscriptions;
 
+    /**
+     * @var string|null The user image
+     */
+    #[ORM\Column(nullable: true)]
+    private ?string $image = null;
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
+        return $this;
+    }
+
     public function __construct()
     {
         $this->notes = new ArrayCollection();
