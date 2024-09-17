@@ -7,8 +7,10 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\UX\Dropzone\Form\DropzoneType;
 
 class CreatorType extends AbstractType
 {
@@ -17,7 +19,13 @@ class CreatorType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('password', PasswordType::class)
-            ->add('image', FileType::class)
+            ->add('image', DropzoneType::class, [
+                'attr' => [
+                    'placeholder' => 'Drag and drop the image here',
+                ],
+                'mapped' => false,
+            ])
+            ->add('submit', SubmitType::class)
         ;
     }
 
