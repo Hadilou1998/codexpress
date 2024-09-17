@@ -116,10 +116,16 @@ class NoteController extends AbstractController
     }
 
     #[Route('/delete/{slug}', name: 'app_note_delete', methods: ['POST'])]
-    public function delete(string $slug, NoteRepository $nr): Response
+    public function delete(string $slug, NoteRepository $nr, EntityManagerInterface $em): Response
     {
         $note = $nr->findOneBySlug($slug); // On recherche la note à supprimer
-        $this->addFlash('success', 'La note a bien été supprimée.'); // On ajoute un message de succès
+        if ($note && $note->getCreator() === $this->getUser()) { // Si la note existe et que l'utilisateur connecté est le créateur de la note
+            $em->remove($note); // On supprime la note
+            $em->flush(); // On enregistre les modifications
+            $this->addFlash('success', 'La note a bien été supprimée.'); // On ajoute un message de succès
+        } else {
+            $this->addFlash('error', 'Vous n\'êtes pas autorisez à supprimer la note'); // On ajoute un message d'erreur
+        }
         return $this->redirectToRoute('app_note_user'); // On redirige vers la page de l'utilisateur
     }
 }
