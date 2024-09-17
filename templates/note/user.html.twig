@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ cretor.username }}'s notes{% endblock %}
+{% block title %}{{ creator.username }}'s notes{% endblock %}
 
 {% block body %}
-    <h1>{{ cretor.username }}'s notes</h1>
+    <h1>{{ creator.username }}'s notes</h1>
     {% for item in userNotes %}
         {{ dump(item) }}
-        <a href="{{ path('app_note_show', {'slug': item.slug}) }}">Show</a>     
+        <a href="{{ path('app_note_show', {'slug': item.slug}) }}">Show</a>
     {% endfor %}
 {% endblock %}

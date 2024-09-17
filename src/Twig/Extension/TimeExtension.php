@@ -6,7 +6,7 @@ use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 
 /**
- * extension Twig pour formater les dates
+ * Extension Twig pour filtrer l'affichage des dates en fonction de la date actuelle
  */
 class TimeExtension extends AbstractExtension
 {
@@ -21,23 +21,23 @@ class TimeExtension extends AbstractExtension
     {
         $now = new \DateTimeImmutable();
         $diff = $date->diff($now);
-
+    
         if ($diff->y > 0) {
-            return $diff->y . ' year' . ($diff->y > 1 ? 's' : '');
+            return $diff->y . ' year' . ($diff->d > 1 ? 's' : '');
         }
-
+    
         if ($diff->m > 0) {
-            return $diff->m . ' month' . ($diff->m > 1 ? 's' : '');
+            return $diff->m . ' month' . ($diff->d > 1 ? 's' : '');
         }
-
+    
         if ($diff->d > 0) {
             return $diff->d . ' day' . ($diff->d > 1 ? 's' : '');
         }
-
+    
         if ($diff->h > 0) {
             return $diff->h . ' hour' . ($diff->h > 1 ? 's' : '');
         }
-
+    
         return $diff->i . ' min' . ($diff->i > 1 ? 's' : '');
     }
 }

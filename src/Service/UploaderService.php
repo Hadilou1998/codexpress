@@ -1,37 +1,35 @@
 <?php
 
-    namespace App\Service;
+namespace App\Service;
 
-    use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-    use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-    /**
-     * Service de téléversement de fichiers dans l'application CodeXpress
-     * - Images (.jpg, .jpeg, .png, .gif)
-     * - Documents (Plus tard)
-     * 
-     * Méthodes : Téléverser, Supprimer
-     */
-    class UploaderService
+/**
+ * Service de téléversement de fichier dans l'application CodeXpress
+ * - Images (.jpg, .jpeg, .png, .gif)
+ * - Documents (Plus tard)
+ * 
+ *  Méthodes: Téléverser, Supprimer
+ */
+class UploaderService
+{
+    private $param;
+
+    public function __construct(ParameterBagInterface $parameterBag)
     {
-        private $param;
+        $this->param = $parameterBag;
+    }
 
-        public function __construct(ParameterBagInterface $parameterBag)
-        {
-            $this->param = $parameterBag;
-        }
+    public function uploadImage($file): string
+    {
+        try {
+            // $orignalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+            $fileName = uniqid('image-') . '.' . $file->guessExtension();
+            $file->move($this->param->get('uploads_images_directory'), $fileName);
 
-        public function upload(UploadedFile $file): string
-        {
-            try {
-                // $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-                $filename = uniqid('image') . '.' . $file->guessExtension();
-                $file->move($this->param->get('uploads_images_directory'), $filename);
-
-                return $this->param->get('uploads_images_directory') . '/' . $filename;              
-            } catch (\Exception $e) {
-                throw new \Exception('Erreur lors du téléversement du fichier: ' . $e->getMessage());
-            }
+            return $this->param->get('uploads_images_directory') . '/' . $fileName;
+        } catch (\Exception $e) {
+            throw new \Exception('An error occured while uploading the image: ' . $e->getMessage());
         }
     }
-?>
+}

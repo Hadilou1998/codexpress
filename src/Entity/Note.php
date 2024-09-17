@@ -7,8 +7,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\String\Slugger\SluggerInterface;
-use Symfony\Component\String\Slugger\Slugger;
 
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -54,25 +52,12 @@ class Note
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
 
-    /**
-     * @var Collection<int, Like>
-     */
-    #[ORM\OneToMany(targetEntity: Like::class, mappedBy: 'note')]
-    private Collection $note;
-
-    /**
-     * @var Collection<int, User>
-     */
-    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'Notes')]
-    private Collection $notes;
-
     public function __construct()
     {
         $this->notifications = new ArrayCollection(); // initialisation du tableau de notifications
         $this->is_public = false; // initialisation du booléen à false
         $this->title = uniqid('note-'); // initialisation du titre au GUID
-        $this->views = 0; // initialisation du nombre de vues à 0
-
+        $this->views = 0; // initialisation du compteur de vues
     }
 
     #[ORM\PrePersist]
@@ -229,43 +214,5 @@ class Note
         $this->creator = $creator;
 
         return $this;
-    }
-
-    /**
-     * @return Collection<int, Like>
-     */
-    public function getNote(): Collection
-    {
-        return $this->note;
-    }
-
-    public function addNote(Like $note): static
-    {
-        if (!$this->note->contains($note)) {
-            $this->note->add($note);
-            $note->setNote($this);
-        }
-
-        return $this;
-    }
-
-    public function removeNote(Like $note): static
-    {
-        if ($this->note->removeElement($note)) {
-            // set the owning side to null (unless already changed)
-            if ($note->getNote() === $this) {
-                $note->setNote(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, User>
-     */
-    public function getNotes(): Collection
-    {
-        return $this->notes;
     }
 }

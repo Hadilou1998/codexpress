@@ -25,7 +25,7 @@ class Notification
     private ?string $type = null;
 
     #[ORM\Column]
-    private ?bool $archive = null;
+    private ?bool $archived = null;
 
     #[ORM\ManyToOne(inversedBy: 'notifications')]
     #[ORM\JoinColumn(nullable: false)]
@@ -53,7 +53,7 @@ class Notification
     public function __construct()
     {
         $this->type = 'info'; // type de notif par défaut est "info"
-        $this->archive = false; // les notifs ne sont pas archivés par défaut
+        $this->archived = false; // les notifs ne sont pas archivés par défaut
     }
 
     public function getId(): ?int
@@ -97,14 +97,14 @@ class Notification
         return $this;
     }
 
-    public function isArchive(): ?bool
+    public function isArchived(): ?bool
     {
-        return $this->archive;
+        return $this->archived;
     }
 
-    public function setArchive(bool $archive): static
+    public function setArchived(bool $archived): static
     {
-        $this->archive = $archive;
+        $this->archived = $archived;
 
         return $this;
     }

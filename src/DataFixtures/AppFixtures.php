@@ -3,16 +3,14 @@
 namespace App\DataFixtures;
 
 use Faker\Factory;
-use App\Entity\User;
-use App\Entity\Category;
 use App\Entity\Note;
-use App\Entity\Notification;
+use App\Entity\User;
 use App\Entity\Network;
-use App\Entity\Like;
+use App\Entity\Category;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
@@ -35,7 +33,7 @@ class AppFixtures extends Fixture
         $categories = [
             'HTML' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-plain.svg',
             'CSS' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-plain.svg',
-            'JS' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-plain.svg',
+            'JavaScript' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-plain.svg',
             'PHP' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/php/php-plain.svg',
             'SQL' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-plain.svg',
             'JSON' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/json/json-plain.svg',
@@ -60,9 +58,18 @@ class AppFixtures extends Fixture
             array_push($categoryArray, $category); // Ajout de l'objet
             $manager->persist($category);
         }
+        // Admin
+            $user =  new User();
+            $user
+                ->setEmail('hello@codexpress.fr')
+                ->setUsername('Jensone')
+                ->setPassword($this->hash->hashPassword($user, 'admin'))
+                ->setRoles(['ROLE_ADMIN'])
+                ->setImage('https://avatar.iran.liara.run/public/50')
+                ;
+            $manager->persist($user);
 
-        $notesArray = []; // Initialisation du tableau pour stocker les notes
-
+            $networks = ['github', 'twitter', 'linkedin', 'facebook', 'reddit', 'instagram', 'youtube'];
         // 10 utilisateurs
         for ($i = 0; $i < 10; $i++) {
             $username = $faker->userName; // Génére un username aléatoire
@@ -73,86 +80,34 @@ class AppFixtures extends Fixture
                 ->setUsername($username)
                 ->setPassword($this->hash->hashPassword($user, 'admin'))
                 ->setRoles(['ROLE_USER'])
-                ->setImage($faker->imageUrl(640, 480, 'people', true));
+                ->setImage('https://avatar.iran.liara.run/public/' . $i)
+                ;
+            for ($z=0; $z < 3; $z++) {
+                $network = new Network();
+                $network
+                    ->setName($faker->randomElement($networks))
+                    ->setUrl('hhtps://' . $network->getName() . '.com')
+                    ->setCreator($user)
+                    ;
+                $manager->persist($network);
+            }
             $manager->persist($user);
-            $usersArray[] = $user; // Ajout de l'utilisateur au tableau
 
             for ($j=0; $j < 10; $j++) { 
                 $note = new Note();
                 $note
-                    ->setTitle($faker->sentence(3))
+                    ->setTitle($faker->sentence())
                     ->setSlug($this->slug->slug($note->getTitle()))
-                    ->setContent($faker->paragraphs(4, true))
+                    ->setContent($faker->randomHtml())
                     ->setPublic($faker->boolean(50))
                     ->setViews($faker->numberBetween(100, 10000))
                     ->setCreator($user)
-                    ->setCategory($faker->randomElement($categoryArray));
+                    ->setCategory($faker->randomElement($categoryArray))
+                    ;
                 $manager->persist($note);
-                $notesArray[] = $note; // Ajout de la note au tableau
             }
         }
 
-        // Création des enregistrements `network`
-        $networks = [
-            'Twitter' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/twitter/twitter-original.svg',
-            'Facebook' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/facebook/facebook-original.svg',
-            'Instagram' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/instagram/instagram-original.svg',
-            'LinkedIn' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/linkedin/linkedin-plain.svg',
-        ];
-
-        // $networksArray = []; // Ce tableau nous servira pour conserver les objets Networks table
-
-        foreach ($networks as $name => $url) {
-            $network = new Network(); // Nouvel objet Network
-            $network
-                ->setName($name) // Ajoute le titre
-                ->setUrl($url) // Ajoute l'url
-                ->setCreator($faker->randomElement($usersArray)); // Ajoute l'utilisateur
-
-            // array_push($networksArray, $network); // Ajout de l'objet
-            $manager->persist($network);
-        }
-
-        // Création des enregistrements `notification`
-        $notifications = [
-            'New note' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New comment' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New follower' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New message' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New notification' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',          
-        ];
-
-        // $notificationsArray = []; // Ce tableau nous servira pour conserver les objets Networks table
-        foreach ($notifications as $title => $url) {
-            $notification = new Notification(); // Nouvel objet Notification
-            $notification
-                ->setTitle($title) // Ajouter le titre
-                ->setContent($faker->paragraphs(4, true)) // Ajouter le contenu
-                ->setType($faker->randomElement(['info', 'success', 'warning', 'danger'])) // Ajouter le type
-                ->setArchive($faker->boolean(50)) // Ajouter le booléen
-                ->setNote($faker->randomElement($notesArray)); // Ajoute la note
-            $manager->persist($notification);
-        }
-
-        // Création des enregistrements `like`
-        $likes = [
-            'New like' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New comment' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New follower' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New message' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-            'New notification' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/github/github-original.svg',
-        ];
-
-        // $likesArray = []; // Ce tableau nous servira pour conserver les objets Networks table
-        foreach ($likes as $title => $url) {
-            $like = new Like(); // Nouvel objet Like
-            $like
-                ->setNote($faker->randomElement($notesArray)) // Ajouter la note
-                ->setCreator($faker->randomElement($usersArray)); // Ajouter l'utilisateur
-            $manager->persist($like);
-        }
-
-
         $manager->flush();
-    } 
+    }
 }
