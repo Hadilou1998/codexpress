@@ -49,7 +49,7 @@
                     </form>
                     {% for item in note.creator.networks %}
                         <a href="{{ item.url }}" class="self-end px-3 py-2 transition-all duration-200 ease-in-out rounded-md bg-violet-100 hover:bg-violet-200 w-fit">
-                            {{ ux_icon('mdi:' ~ item.name, { 'class': 'h-5 w-5 text-violet-950 inline-block' }) }}
+                            {{ ux_icon('mdi:' ~ item.name|lower, { 'class': 'h-5 w-5 text-violet-950 inline-block' }) }}
                         </a>
                     {% endfor %}
                 </div>
