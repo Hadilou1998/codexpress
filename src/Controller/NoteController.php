@@ -49,6 +49,9 @@ class NoteController extends AbstractController
         UserRepository $user, // On récupère le repository de l'entité User
     ): Response {
         $creator = $user->findOneByUsername($username); // On recherche l'utilisateur
+        if ($creator === null) { // Vérification de l'existence de l'utilisateur
+            throw $this->createNotFoundException('Utilisateur not found');
+        }
         return $this->render('note/user.html.twig', [
             'creator' => $creator, // On envoie les données de l'utilisateur à la vue Twig
             'userNotes' => $creator->getNotes(), // On récupère les notes de l'utilisateur
