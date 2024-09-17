@@ -24,7 +24,7 @@
         public function upload(UploadedFile $file): string
         {
             try {
-                $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                // $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
                 $filename = uniqid('image') . '.' . $file->guessExtension();
                 $file->move($this->param->get('uploads_images_directory'), $filename);
 
