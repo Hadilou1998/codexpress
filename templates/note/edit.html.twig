@@ -1,7 +1,9 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello NoteController!{% endblock %}
+{% block title %}Page Updated{% endblock %}
 
 {% block body %}
-    
+    {{ dump(creator) }}
+    {{ dump(app.user) }}
+    {{ dump(ceci) }}
 {% endblock %}

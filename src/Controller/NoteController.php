@@ -47,11 +47,11 @@ class NoteController extends AbstractController
     #[Route('/new', name: 'app_note_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $em, SluggerInterface $slugger): Response
     {
-        /*if (!$this->getUser()) {
-            $this->addFlash('error', 'Vous devez être connecté pour ajouter une note');
-            return $this->redirectToRoute('app_login');
-        }*/
-        
+        if (!$this->getUser()) { // Si l'utilisateur n'est pas connecté
+            $this->addFlash('error', 'Vous devez être connecté pour ajouter une note'); // On affiche un message d'erreur
+            return $this->redirectToRoute('app_login'); // On redirige vers la page de connexion
+        }
+
         $form = $this->createForm(NoteType::class); // Chargement du formulaire
         $form = $form->handleRequest($request); // Recuperation des données de la requête POST
 
@@ -78,10 +78,29 @@ class NoteController extends AbstractController
     }
 
     #[Route('/edit/{slug}', name: 'app_note_edit', methods: ['GET', 'POST'])]
-    public function edit(string $slug, NoteRepository $nr): Response
+    public function edit(string $slug, NoteRepository $nr, Request $request, EntityManagerInterface $em): Response
     {
         $note = $nr->findOneBySlug($slug); // On recherche la note à modifier
-        return $this->render('note/edit.html.twig', []);
+
+        if ($note->getCreator() !== $this->getUser()) { // Si la note n'existe pas ou si elle ne correspond pas à l'utilisateur connecté
+            $this->addFlash('error', 'Vous etes autorisez à modifier la note'); // On ajoute un message de l'utilisateur
+            return $this->redirectToRoute('app_note_show', ['slug' => $slug]); // On redirige vers la page de la note
+        }
+
+        $form = $this->createForm(NoteType::class, $note); // On charge le formulaire avec les données de la note
+        $form = $form->handleRequest($request); // On récupère les données du formulaire
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($note);
+            $em->flush();
+
+            $this->addFlash('success', 'Note modifiée avec succès');
+            return $this->redirectToRoute('app_note_show', ['slug' => $note->getSlug()]); // On redirige vers la page de la note modifiée
+        }
+
+        return $this->render('note/edit.html.twig', [ // On affiche la page de modification
+
+        ]);
     }
 
     #[Route('/delete/{slug}', name: 'app_note_delete', methods: ['POST'])]
