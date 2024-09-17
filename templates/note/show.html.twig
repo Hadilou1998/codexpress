@@ -42,7 +42,7 @@
                         <input type="hidden" name="note_id" value="{{ note.id }}">
                         <input type="hidden" name="creator_id" value="{{ app.user.id ?? 1 }}">
                         <button type="submit" class="flex items-center self-end gap-1 px-3 py-2 transition-all duration-200 ease-in-out rounded-md bg-violet-100 hover:bg-violet-200 w-fit">
-                            {% set likes = note.likes|length %}
+                            {% set likes = note.views %}
                             {{ ux_icon('mdi:heart-outline', { 'class': 'h-5 w-5 text-violet-950 mr-1 inline-block' }) }}
                             {{ likes|format_number }}
                         </button>
@@ -67,7 +67,7 @@
             </div>
         </aside>
     </section>
-    <div class="max-w-screen-lg px-4 pb-6 mx-auto md:pb-16">
+    {#<div class="max-w-screen-lg px-4 pb-6 mx-auto md:pb-16">
         {{ include('components/cta.html.twig') }}
-    </div>
+    </div>#}
 {% endblock %}
