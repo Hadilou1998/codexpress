@@ -7,6 +7,7 @@ use App\Form\NoteType;
 use App\Repository\NoteRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,18 +19,15 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class NoteController extends AbstractController
 {
     #[Route('/', name: 'app_note_all', methods: ['GET'])]
-    public function all(NoteRepository $nr): Response
+    public function all(NoteRepository $nr, Request $request, PaginatorInterface $paginator): Response
     {
-        return $this->render('note/all.html.twig', [
-            'allNotes' => $nr->findBy(['is_public' => true], ['created_at' => 'DESC']),
-        ]);
+        $pagination = $paginator->paginate(
+            $nr->findBy(['is_public' => true], ['created_at' => 'DESC']), // Le tableau de données
+            $request->query->getInt('page', 1), // Page en cours
+            10 // Nombre d'éléments par page
+        );
+        return $this->render('note/all.html.twig', ['allNotes' => $pagination,]);
     }
-
-
-
-
-
-
 
     #[Route('/n/{slug}', name: 'app_note_show', methods: ['GET'])]
     public function show(string $slug, NoteRepository $nr): Response
@@ -40,16 +38,6 @@ class NoteController extends AbstractController
             'note' => $note,
         ]);
     }
-
-
-
-
-
-
-
-
-
-
 
     #[Route('/u/{username}', name: 'app_note_user', methods: ['GET'])]
     public function userNotes(
