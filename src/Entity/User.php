@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $updated_at = null;
 
     #[ORM\Column]
-    private bool $isVerified = false;
+    private bool $is_verified = false;
 
     /**
     * @var Collection<int, Network>
@@ -226,12 +226,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isVerified(): bool
     {
-        return $this->isVerified;
+        return $this->is_verified;
     }
 
-    public function setVerified(bool $isVerified): static
+    public function setVerified(bool $is_verified): static
     {
-        $this->isVerified = $isVerified;
+        $this->is_verified = $is_verified;
 
         return $this;
     }
