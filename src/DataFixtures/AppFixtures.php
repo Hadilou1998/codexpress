@@ -65,7 +65,7 @@ class AppFixtures extends Fixture
         $user
             ->setEmail('kakarot@codexpress.fr')
             ->setUsername('Kakarot')
-            ->setPassword($this->hash->hashPassword($user, 'admin'))
+            ->setPassword($this->hash->hashPassword($user, 'saiyan'))
             ->setRoles(['ROLE_ADMIN'])
             ->setImage('https://avatar.iran.liara.run/public/50')
             ;
