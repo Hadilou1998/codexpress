@@ -75,7 +75,7 @@ class AppFixtures extends Fixture
             $network = new Network();
             $network
                 ->setName($faker->randomElement($networks))
-                ->setUrl('https://' . $network->getName() . '.com/Jensone')
+                ->setUrl('https://' . $network->getName() . '.com/Hadilou1998')
                 ->setCreator($user)
                 ;
             $manager->persist($network);
