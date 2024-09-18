@@ -17,20 +17,39 @@ class NoteRepository extends ServiceEntityRepository
         parent::__construct($registry, Note::class);
     }
 
-    // Recherche par mot-clé dans le tite et le contenu de note publiques
-    public function findBySearch(string $query): array
+    //  Recherche par mot-clé dans le tite et le contenu de note publiques
+    //  public function findBySearch(string $query): array
+    //  {
+    //      $qb = $this->createQueryBuilder('n');
+    //      $qb
+    //         ->where('n.is_public = true') // Filtre les notes publiques
+    //         ->andWhere('n.title LIKE :query OR n.content LIKE :query') // Recherche par mot-clé
+    //        ->setParameter('query', '%' . $query . '%') // Ajoute le mot-clé à la requête
+    //        ->orderBy('n.created_at', 'DESC') // Trie par date de création
+    //        ->setMaxResults(100) // Limite à 100 résultats
+    //             ;
+    //         return $qb->getQuery()->getResult();
+    //      }
+
+    /**
+    * FindByQuery
+    *Méthode pour la recherche de note dans l'application CodeXpress
+    *@param string $query
+    *@return array
+    */
+    public function findByQuery($query): array
     {
-        $qb = $this->createQueryBuilder('n');
-        $qb
-            ->where('n.is_public = true') // Filtre les notes publiques
-            ->andWhere('n.title LIKE :query OR n.content LIKE :query') // Recherche par mot-clé
-            ->setParameter('query', '%' . $query . '%') // Ajoute le mot-clé à la requête
-            ->orderBy('n.created_at', 'DESC') // Trie par date de création
-            ->setMaxResults(100) // Limite à 100 résultats
-            ;
-        return $qb->getQuery()->getResult();
+        return $this->createQueryBuilder('n')
+        ->where('n.is_public = true')
+            ->andWhere('n.title LIKE :q OR n.content LIKE :q')
+            ->setParameter('q', '%'. $query .'%')
+            ->orderBy('n.created_at', 'DESC')
+            ->setMaxResults(10)
+            ->getQuery()
+            ->getResult()
+        ;
     }
-    
+
     // 3 dernières publiques créées par l'id de l'utilisateur
     public function findByCreator($id): array
     {
@@ -43,21 +62,6 @@ class NoteRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
             ;
-    }
-
-    /**
-     * @return Note[] Returns an array of Note objects
-     */
-    public function findByQueryBuilder($query): array
-    {
-        return $this->createQueryBuilder('n')
-            ->where('n.is_public = true')
-            ->andWhere('n.title LIKE :q OR n.content LIKE :q')
-            ->setParameter('q', '%' . $query . '%')
-            ->orderBy('n.created_at', 'ASC')
-            ->getQuery()
-            ->getResult()
-        ;
     }
 
     //    public function findOneBySomeField($value): ?Note
