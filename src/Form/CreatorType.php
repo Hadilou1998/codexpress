@@ -19,17 +19,14 @@ class CreatorType extends AbstractType
         $builder
             ->add('email', EmailType::class)
             ->add('image', DropzoneType::class, [
-                'attr' => ['placeholder' => 'Drag and drop photo here'],
                 'mapped' => false,
+                'required' => false,
                 'constraints' => [
                     new File([
-                        'maxSize' => '5000k',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                            'image/gif',
-                        ],
-                    ]),
+                        'maxSize' => '1024k',
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif',],
+                        'mimeTypesMessage' => 'Please upload a valid image file',
+                    ])
                 ],
             ])
             ->add('submit', SubmitType::class)

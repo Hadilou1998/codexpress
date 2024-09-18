@@ -1,12 +1,18 @@
-<nav class="flex items-center justify-between p-2 bg-slate-50">
+<nav class="flex justify-between items-center bg-slate-50 p-2">
 	<a href="{{ path('app_home') }}" class="flex items-center gap-1">
-		<img src="{{ asset('/img/logo_dark.svg') }}" alt="logo" class="transition-transform duration-200 ease-in-out rounded-full hover:scale-95">
+		<img src="{{ asset('/img/logo_dark.svg') }}" alt="logo" class="rounded-full hover:scale-95 transition-transform duration-200 ease-in-out">
 		<p>CodeXpress</p>
 	</a>
-	<div class="flex items-center justify-between gap-4">
-		{{ include('components/partials/search.html.twig') }}
-        <div class="flex items-center justify-between gap-4">
-		{{ include('components/partials/navbar-logout.html.twig') }}
+	<div class="flex justify-between items-center gap-4">
+		{{ include('components/_partials/search.html.twig') }}
+        <div class="flex justify-between items-center gap-4">
+            {% if app.user %}
+				{# User is logged in #}
+				{{ include('components/_partials/navbar-login.html.twig') }}
+			{% else %}
+				{# User is logged out #}
+				{{ include('components/_partials/navbar-logout.html.twig') }}
+			{% endif %}
         </div>
 	</div>
 </nav>

@@ -40,11 +40,13 @@ class AppFixtures extends Fixture
             'Python' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/python/python-plain.svg',
             'Ruby' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/ruby/ruby-plain.svg',
             'C++' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/cplusplus/cplusplus-plain.svg',
-            'Go' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-wordmark.svg',
+            'Go' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/go/go-original-wordmark.svg',
             'bash' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/bash/bash-plain.svg',
             'Markdown' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/markdown/markdown-original.svg',
             'Java' => 'https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original-wordmark.svg',
         ];
+
+        $networks = ['github', 'twitter', 'linkedin', 'facebook', 'reddit', 'instagram', 'youtube'];
 
         $categoryArray = []; // Ce tableau nous servira pour conserver les objets Category
 
@@ -59,17 +61,40 @@ class AppFixtures extends Fixture
             $manager->persist($category);
         }
         // Admin
-            $user =  new User();
-            $user
-                ->setEmail('hello@codexpress.fr')
-                ->setUsername('Jensone')
-                ->setPassword($this->hash->hashPassword($user, 'admin'))
-                ->setRoles(['ROLE_ADMIN'])
-                ->setImage('https://avatar.iran.liara.run/public/50')
-                ;
-            $manager->persist($user);
+        $user =  new User();
+        $user
+            ->setEmail('kakarot@codexpress.fr')
+            ->setUsername('Kakarot')
+            ->setPassword($this->hash->hashPassword($user, 'admin'))
+            ->setRoles(['ROLE_ADMIN'])
+            ->setImage('https://avatar.iran.liara.run/public/50')
+            ;
+        $manager->persist($user);
 
-            $networks = ['github', 'twitter', 'linkedin', 'facebook', 'reddit', 'instagram', 'youtube'];
+        for ($d=0; $d < 3; $d++) {
+            $network = new Network();
+            $network
+                ->setName($faker->randomElement($networks))
+                ->setUrl('https://' . $network->getName() . '.com/Jensone')
+                ->setCreator($user)
+                ;
+            $manager->persist($network);
+        }
+
+        for ($y=0; $y < 10; $y++) { 
+            $note = new Note();
+            $note
+                ->setTitle($faker->sentence())
+                ->setSlug($this->slug->slug($note->getTitle()))
+                ->setContent($faker->randomHtml())
+                ->setPublic($faker->boolean(50))
+                ->setViews($faker->numberBetween(100, 10000))
+                ->setCreator($user)
+                ->setCategory($faker->randomElement($categoryArray))
+                ;
+            $manager->persist($note);
+        }
+
         // 10 utilisateurs
         for ($i = 0; $i < 10; $i++) {
             $username = $faker->userName; // Génére un username aléatoire
@@ -86,7 +111,7 @@ class AppFixtures extends Fixture
                 $network = new Network();
                 $network
                     ->setName($faker->randomElement($networks))
-                    ->setUrl('hhtps://' . $network->getName() . '.com')
+                    ->setUrl('https://' . $network->getName() . '.com/' . $usernameFinal)
                     ->setCreator($user)
                     ;
                 $manager->persist($network);
