@@ -19,7 +19,7 @@ class SearchController extends AbstractController
         if ($searchQuery === null) {
             return $this->render('search/results.html.twig');
         }
-
+        
         $query = $paginator->paginate(
             $nr->findBySearch($searchQuery),
             $request->query->getInt('page', 1),

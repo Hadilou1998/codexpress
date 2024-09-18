@@ -21,10 +21,10 @@
         </div>
     </header>
     <main class="max-w-screen-lg px-4 py-5 mx-auto md:py-16">
-        {% if notes is defined %}
-            {% if notes|length > 0 %}
+        {% if allNotes is defined %}
+            {% if allNotes|length > 0 %}
                 <p class="mb-4 text-center">
-                    {{ notes|length }} results on this page
+                    {{ allNotes|length }} results on this page
                 </p>
                 {{ include('components/notes-list.html.twig') }}
             {% else %}
@@ -36,9 +36,9 @@
             </div>
         {% endif %}
     </main>
-    {% if notes is defined %}
+    {% if allNotes is defined %}
         <div class="px-4 pb-6 text-center md:pb-16">
-            {{ knp_pagination_render(notes) }}
+            {{ knp_pagination_render(allNotes) }}
         </div>
     {% endif %}
 {% endblock %}
