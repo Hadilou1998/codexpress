@@ -14,21 +14,22 @@ class SearchController extends AbstractController
     #[Route('/search', name: 'app_search')]
     public function search(Request $request, NoteRepository $nr, PaginatorInterface $paginator): Response
     {
-        // $searchQuery = $request->query->get('q');
+        $searchQuery = $request->query->get('q');
         
-        if ($request->get('q') === null) {
+        if (!$searchQuery) {
            return $this->render('search/results.html.twig');
         } // Si l'accès est refusé, on renvoie vers la page d'accueil
         
-        $pagination = $paginator->paginate(
-            $nr->findByQuery($request->get('q')),
+        $query = $paginator->paginate(
+            $nr->findByQuery($searchQuery),
             $request->query->getInt('page', 1),
             24
         );
 
         return $this->render('search/results.html.twig', [
-            'allNotes' => $pagination,
-            'searchQuery' => $request->get('q')
+            'searchQuery' => $searchQuery,
+            'allNotes' => $query,
+
         ]);
     }
 }
