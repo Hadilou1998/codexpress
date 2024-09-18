@@ -12,9 +12,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class SearchController extends AbstractController
 {
     #[Route('/search', name: 'app_search')]
-    public function search(Request $request, PaginatorInterface $paginator, NoteRepository $nr): Response
+    public function search(Request $request, NoteRepository $nr): Response
     {
-        $searchQuery = $request->query->get('q');
+        /*$searchQuery = $request->query->get('q');
         
         if ($searchQuery === null) {
             return $this->render('search/results.html.twig');
@@ -24,11 +24,10 @@ class SearchController extends AbstractController
             $nr->findBySearch($searchQuery),
             $request->query->getInt('page', 1),
             20
-        );
+        );*/
 
         return $this->render('search/results.html.twig', [
-            'searchQuery' => $searchQuery,
-            'notes' => $query,
+            'allNotes' => $nr->findByQuery(),
         ]);
     }
 }

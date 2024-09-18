@@ -31,34 +31,34 @@ class NoteRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
     
-    // 3 dernières publiques créées par l'utilisateur
-    public function findByCreator(User $user): array
+    // 3 dernières publiques créées par l'id de l'utilisateur
+    public function findByCreator($id): array
     {
-        $qb = $this->createQueryBuilder('n');
-        $qb
-            ->where('n.creator = :user') // Filtre les notes créées par l'utilisateur
-            ->andWhere('n.is_public = true') // Filtre les notes publiques
-            ->setParameter('user', $user)
+        return $this->createQueryBuilder('n')
+            ->where('n.is_public = true')
+            ->andWhere('n.creator = :id')
+            ->setParameter('id', $id)
             ->orderBy('n.created_at', 'DESC') // Trie par date de création
             ->setMaxResults(3) // Limite à 3 résultats
+            ->getQuery()
+            ->getResult()
             ;
-        return $qb->getQuery()->getResult();
     }
 
-    //    /**
-    //     * @return Note[] Returns an array of Note objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('n')
-    //            ->andWhere('n.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('n.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    /**
+     * @return Note[] Returns an array of Note objects
+     */
+    public function findByQueryBuilder($query): array
+    {
+        return $this->createQueryBuilder('n')
+            ->where('n.is_public = true')
+            ->andWhere('n.title LIKE :q OR n.content LIKE :q')
+            ->setParameter('q', '%' . $query . '%')
+            ->orderBy('n.created_at', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
 
     //    public function findOneBySomeField($value): ?Note
     //    {

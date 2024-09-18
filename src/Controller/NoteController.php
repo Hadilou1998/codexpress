@@ -37,6 +37,7 @@ class NoteController extends AbstractController
         // TODO: Mettre en place le filtre pour les notes privées
         return $this->render('note/show.html.twig', [
             'note' => $note,
+            'creatorNotes' => $nr->findByCreator($note->getCreator()->getId()),
         ]);
     }
 
