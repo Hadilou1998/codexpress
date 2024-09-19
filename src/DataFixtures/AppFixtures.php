@@ -210,7 +210,7 @@ class AppFixtures extends Fixture
         $views = [];
         $notes = $manager->getRepository(Note::class)->findAll();
         $ips = ['192.168.1.1', '192.168.1.2', '192.168.1.3', '192.168.1.4', '192.168.1.5'];
-        
+
         for ($i = 0; $i < 10; $i++) {
             $note = $notes[array_rand($notes)];
             $ip = $ips[array_rand($ips)];
