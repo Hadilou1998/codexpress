@@ -66,8 +66,7 @@ class Note
         $this->notifications = new ArrayCollection(); // initialisation du tableau de notifications
         $this->is_public = false; // initialisation du booléen à false
         $this->title = uniqid('note-'); // initialisation du titre au GUID
-        $this->views = 0; // initialisation du compteur de vues
-        $this->ip_address = new ArrayCollection();
+        $this->views = 0; // initialisation du compteur de vues à 0
     }
 
     #[ORM\PrePersist]
@@ -136,12 +135,12 @@ class Note
         return $this;
     }
 
-    public function getViews(): ?string
+    public function getViews(): ?int
     {
         return $this->views;
     }
 
-    public function setViews(string $views): static
+    public function setViews(int $views): self
     {
         $this->views = $views;
 
@@ -222,36 +221,6 @@ class Note
     public function setCreator(?User $creator): static
     {
         $this->creator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, View>
-     */
-    public function getIpAddress(): Collection
-    {
-        return $this->ip_address;
-    }
-
-    public function addIpAddress(View $ipAddress): static
-    {
-        if (!$this->ip_address->contains($ipAddress)) {
-            $this->ip_address->add($ipAddress);
-            $ipAddress->setNote($this);
-        }
-
-        return $this;
-    }
-
-    public function removeIpAddress(View $ipAddress): static
-    {
-        if ($this->ip_address->removeElement($ipAddress)) {
-            // set the owning side to null (unless already changed)
-            if ($ipAddress->getNote() === $this) {
-                $ipAddress->setNote(null);
-            }
-        }
 
         return $this;
     }

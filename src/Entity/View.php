@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ViewRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -21,7 +22,7 @@ class View
     private Collection $notes;
 
     #[ORM\ManyToOne(inversedBy: 'views')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Note $note = null;
 
     #[ORM\Column(length: 120)]
@@ -32,6 +33,24 @@ class View
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->created_at = new \DateTimeImmutable();
+        $this->setUpdatedAtValue();
+    }
+
+    #[ORM\PreUpdate]
+    public function setUpdatedAtValue(): void
+    {
+        $this->updated_at = new \DateTimeImmutable();
+    }
+
+    public function __construct()
+    {   
+        $this->notes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {

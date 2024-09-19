@@ -12,8 +12,10 @@ use App\Entity\Notification;
 use App\Entity\Offer;
 use App\Entity\Subscription;
 use App\Entity\View;
+use App\Repository\NoteRepository;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -21,13 +23,19 @@ class AppFixtures extends Fixture
 {
     private $slug = null;
     private $hash = null;
+    private $noteRepository = null;
+    private $entityManager = null;
 
     public function __construct(
-        private SluggerInterface $slugger,
-        private UserPasswordHasherInterface $hasher
+        SluggerInterface $slugger,
+        UserPasswordHasherInterface $hasher,
+        NoteRepository $noteRepository,
+        EntityManagerInterface $entityManager
     ) {
         $this->slug = $slugger;
         $this->hash = $hasher;
+        $this->noteRepository = $noteRepository;
+        $this->entityManager = $entityManager;
     }
 
     public function load(ObjectManager $manager): void
@@ -75,16 +83,6 @@ class AppFixtures extends Fixture
             ;
         $manager->persist($user);
 
-        for ($d=0; $d < 3; $d++) {
-            $network = new Network();
-            $network
-                ->setName($faker->randomElement($networks))
-                ->setUrl('https://' . $network->getName() . '.com/')
-                ->setCreator($user)
-                ;
-            $manager->persist($network);
-        }
-
         for ($y=0; $y < 10; $y++) { 
             $note = new Note();
             $note
@@ -107,7 +105,7 @@ class AppFixtures extends Fixture
             $user
                 ->setEmail($usernameFinal . '@' . $faker->freeEmailDomain)
                 ->setUsername($username)
-                ->setPassword($this->hash->hashPassword($user, 'admin'))
+                ->setPassword($this->hash->hashPassword($user, 'saiyan'))
                 ->setRoles(['ROLE_USER'])
                 ;
             for ($z=0; $z < 3; $z++) {
@@ -128,7 +126,6 @@ class AppFixtures extends Fixture
                     ->setSlug($this->slug->slug($note->getTitle()))
                     ->setContent($faker->randomHtml())
                     ->setPublic($faker->boolean(50))
-                    ->setPremium($faker->boolean(50))
                     ->setViews($faker->numberBetween(100, 10000))
                     ->setCreator($user)
                     ->setCategory($faker->randomElement($categoryArray))
@@ -154,12 +151,12 @@ class AppFixtures extends Fixture
             $user = $faker->randomElement($manager->getRepository(User::class)->findAll());
             $note = $faker->randomElement($manager->getRepository(Note::class)->findAll());
 
-            $likes = new Like();
-            $likes
+            $like = new Like();
+            $like
                 ->setCreator($user)
                 ->setNote($note)
                 ;
-            $manager->persist($likes);
+            $manager->persist($like);
         }
 
         // Creation de 10 notifications
@@ -182,7 +179,7 @@ class AppFixtures extends Fixture
                 ->setContent($faker->sentence()) // Contenu de la notification
                 ->setType($key) // Type de la notification
                 ->setArchived(false) // La notification n'est pas archivée
-                ->setNote($note) // La notification est liée à une note
+                ->setNote($faker->randomElement($manager->getRepository(Note::class)->findAll())) // La notification est liée à une note
                 ;
             $manager->persist($notification);
         }
@@ -201,13 +198,13 @@ class AppFixtures extends Fixture
             $note = $faker->randomElement($manager->getRepository(Note::class)->findAll());
             $category = $faker->randomElement($manager->getRepository(Category::class)->findAll());
 
-            $offers = new Offer();
-            $offers
+            $offer = new Offer();
+            $offer
                 ->setName($faker->sentence()) // Nom de l'offre
                 ->setPrice($faker->randomFloat(2, 10, 100)) // Prix de l'offre
                 ->setFeatures($faker->sentence()) // Caractéristiques de l'offre
                 ;
-            $manager->persist($offers);
+            $manager->persist($offer);
         }
         
         // Création des subscriptions
@@ -222,34 +219,44 @@ class AppFixtures extends Fixture
         for ($m=0; $m < 10; $m++) {
             $user = $faker->randomElement($manager->getRepository(User::class)->findAll());
 
-            $subscriptions = new Subscription();
-            $subscriptions
+            $subscription = new Subscription();
+            $subscription
                 ->setOffer($faker->randomElement($manager->getRepository(Offer::class)->findAll())) // Offre de la subscription
                 ->setCreator($user) // Utilisateur de la subscription
                 ->setStartDate(new \DateTimeImmutable()) // Date de début de la subscription
                 ->setEndDate(new \DateTimeImmutable()) // Date de fin de la subscription
                 ;
-            $manager->persist($subscriptions);
+            $manager->persist($subscription);
         }
-        
-        // Création des views
+
+        // Ajouter des views
         $views = [
-            'view' => 'view',
-            'edit' => 'edit',
-            'delete' => 'delete',
-            'comment' => 'comment',
-           'share' =>'share',
+            'views' => 'views',
+            'likes' => 'likes',
+            'comments' => 'comments',
+            'shares' => 'shares',
+            'downloads' => 'downloads',
+            'saves' => 'saves',
+            'follows' => 'follows',
+            'friends' => 'friends',
+            'messages' => 'messages',
+            'notifications' => 'notifications',
+            'settings' => 'settings',
+            'profile' => 'profile',
+            'search' => 'search',
+            'home' => 'home',
+            'explore' => 'explore',
         ];
 
-        for ($n=0; $n < 10; $n++) {
-            $note = $faker->randomElement($manager->getRepository(Note::class)->findAll());
+        $viewsArrray = [];
 
-            $views = new View();
-            $views
-                ->setNote($note) // Note de la view
-                ->setIpAddress($faker->ipv4()) // Adresse IP de la view
+        foreach ($views as $key => $value) {
+            $view = new View();
+            $view
+                ->setNote($faker->randomElement($manager->getRepository(Note::class)->findAll())) // Note de la vue
+                ->setIpAddress($faker->ipv4()) // Adresse IP de la vue
                 ;
-            $manager->persist($views);
+            $manager->persist($view);
         }
 
         $manager->flush();

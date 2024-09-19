@@ -17,7 +17,7 @@ class Like
     #[ORM\ManyToOne(inversedBy: 'note')]
     private ?Note $note = null;
 
-    #[ORM\ManyToOne(inversedBy: 'new_creator')]
+    #[ORM\ManyToOne(inversedBy: 'creator')]
     private ?User $creator = null;
 
     public function getId(): ?int
