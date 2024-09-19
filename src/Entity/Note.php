@@ -52,12 +52,6 @@ class Note
     #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
 
-    /**
-     * @var Collection<int, View>
-     */
-    #[ORM\OneToMany(targetEntity: View::class, mappedBy: 'Note')]
-    private Collection $ip_address;
-
     #[ORM\Column(nullable: false)]
     private ?bool $is_premium = false;
 
