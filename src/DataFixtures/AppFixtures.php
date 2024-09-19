@@ -199,8 +199,8 @@ class AppFixtures extends Fixture
             $subscription
                 ->setOffer($offer)
                 ->setCreator($user)
-                ->setStartDate($faker->DateTimeImmutable('-1 year', 'now'))
-                ->setEndDate($faker->DateTimeImmutable('now', '+1 year'))
+                ->setStartDate((new \DateTimeImmutable())->modify('+1 month'))
+                ->setEndDate((new \DateTimeImmutable())->modify('+1 year'))
                 ;
             $manager->persist($subscription);
             $subscriptions[] = $subscription;
@@ -208,14 +208,16 @@ class AppFixtures extends Fixture
 
         // Création des views
         $views = [];
-
+        $notes = $manager->getRepository(Note::class)->findAll();
+        $ips = ['192.168.1.1', '192.168.1.2', '192.168.1.3', '192.168.1.4', '192.168.1.5'];
+        
         for ($i = 0; $i < 10; $i++) {
-            $user = $users[array_rand($users)];
             $note = $notes[array_rand($notes)];
+            $ip = $ips[array_rand($ips)];
             $view = new View();
             $view
-                ->setNote($note) // Associez la note à la vue
-                ->setIpAddress($user->ipAddress) // Utilisez l'adresse IP de l'utilisateur
+                ->setNoteId($note->getId())
+                ->setIpAddress($ip)
                 ;
             $manager->persist($view);
             $views[] = $view;

@@ -13,7 +13,7 @@ class View
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: false)]
     private ?int $note_id = null;
 
     #[ORM\Column(length: 255)]
@@ -29,9 +29,9 @@ class View
         return $this->note_id;
     }
 
-    public function setNoteId(int $note_id): static
+    public function setNoteId(int $note): static
     {
-        $this->note_id = $note_id;
+        $this->note_id = $note;
 
         return $this;
     }
