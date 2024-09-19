@@ -13,10 +13,11 @@ class View
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(nullable: false)]
-    private ?int $note_id = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Note $note = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 80)]
     private ?string $ip_address = null;
 
     public function getId(): ?int
@@ -24,14 +25,14 @@ class View
         return $this->id;
     }
 
-    public function getNoteId(): ?int
+    public function getNote(): ?Note
     {
-        return $this->note_id;
+        return $this->note;
     }
 
-    public function setNoteId(int $note): static
+    public function setNote(?Note $note): static
     {
-        $this->note_id = $note;
+        $this->note = $note;
 
         return $this;
     }
