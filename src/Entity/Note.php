@@ -58,6 +58,9 @@ class Note
     #[ORM\OneToMany(targetEntity: View::class, mappedBy: 'Note')]
     private Collection $ip_address;
 
+    #[ORM\Column(nullable: false)]
+    private ?bool $is_premium = false;
+
     public function __construct()
     {
         $this->notifications = new ArrayCollection(); // initialisation du tableau de notifications
@@ -249,6 +252,18 @@ class Note
                 $ipAddress->setNote(null);
             }
         }
+
+        return $this;
+    }
+
+    public function isPremium(): ?bool
+    {
+        return $this->is_premium;
+    }
+
+    public function setPremium(bool $is_premium): static
+    {
+        $this->is_premium = $is_premium;
 
         return $this;
     }

@@ -13,8 +13,9 @@ class View
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'notes')]
-    private ?Note $Note = null;
+    #[ORM\ManyToOne(targetEntity: Note::class, inversedBy: 'notes')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Note $note = null;
 
     #[ORM\Column(length: 120)]
     private ?string $ip_address = null;
@@ -32,12 +33,12 @@ class View
 
     public function getNote(): ?Note
     {
-        return $this->Note;
+        return $this->note;
     }
 
     public function setNote(?Note $Note): static
     {
-        $this->Note = $Note;
+        $this->note = $Note;
 
         return $this;
     }
