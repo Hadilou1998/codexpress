@@ -221,8 +221,6 @@ class AppFixtures extends Fixture
 
         for ($m=0; $m < 10; $m++) {
             $user = $faker->randomElement($manager->getRepository(User::class)->findAll());
-            $note = $faker->randomElement($manager->getRepository(Note::class)->findAll());
-            $category = $faker->randomElement($manager->getRepository(Category::class)->findAll());
 
             $subscriptions = new Subscription();
             $subscriptions
@@ -243,15 +241,13 @@ class AppFixtures extends Fixture
            'share' =>'share',
         ];
 
-
-
         for ($n=0; $n < 10; $n++) {
             $note = $faker->randomElement($manager->getRepository(Note::class)->findAll());
 
             $views = new View();
             $views
-                ->setNote($note) // Note regardée
-                ->setIpAddress($faker->ipv4()) // Adresse IP de l'utilisateur
+                ->setNote($note) // Note de la view
+                ->setIpAddress($faker->ipv4()) // Adresse IP de la view
                 ;
             $manager->persist($views);
         }

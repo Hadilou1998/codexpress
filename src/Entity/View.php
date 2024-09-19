@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\ViewRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ViewRepository::class)]
@@ -13,7 +14,13 @@ class View
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Note::class, inversedBy: 'notes')]
+    /**
+     * @var Collection<int, Note>
+     */
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'view', orphanRemoval: true)]
+    private Collection $notes;
+
+    #[ORM\ManyToOne(inversedBy: 'views')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Note $note = null;
 
@@ -36,9 +43,9 @@ class View
         return $this->note;
     }
 
-    public function setNote(?Note $Note): static
+    public function setNote(?Note $note): static
     {
-        $this->note = $Note;
+        $this->note = $note;
 
         return $this;
     }
