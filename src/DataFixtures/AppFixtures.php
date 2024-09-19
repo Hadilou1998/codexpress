@@ -64,10 +64,9 @@ class AppFixtures extends Fixture
         $user =  new User();
         $user
             ->setEmail('kakarot@codexpress.fr')
-            ->setUsername('Kakarot')
+            ->setUsername('Kakarot93')
             ->setPassword($this->hash->hashPassword($user, 'saiyan'))
             ->setRoles(['ROLE_ADMIN'])
-            ->setImage('https://avatar.iran.liara.run/public/50')
             ;
         $manager->persist($user);
 
@@ -105,7 +104,6 @@ class AppFixtures extends Fixture
                 ->setUsername($username)
                 ->setPassword($this->hash->hashPassword($user, 'admin'))
                 ->setRoles(['ROLE_USER'])
-                ->setImage('https://avatar.iran.liara.run/public/' . $i)
                 ;
             for ($z=0; $z < 3; $z++) {
                 $network = new Network();

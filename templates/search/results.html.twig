@@ -14,7 +14,6 @@
                     </p>
                 {% else %}                        
                     <form action="{{ path('app_search') }}" method="get" class="items-center bg-white rounded-md p-1 w-80 mx-auto shadow">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token('authenticate') }}">
                         <input type="text" name="q" id="" placeholder="What are you looking for?" class="bg-transparent outline-none w-full text-center" required>
                     </form>
                 {% endif %}

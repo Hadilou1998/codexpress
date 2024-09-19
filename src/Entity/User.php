@@ -61,13 +61,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Network::class, mappedBy: 'creator', orphanRemoval: true)]
     private Collection $networks;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: true)]
-    private $image;
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     public function __construct()
     {
         $this->notes = new ArrayCollection();
-        $this->networks = new ArrayCollection();
+        $this->image = 'default.png';
     }
 
     #[ORM\PrePersist]

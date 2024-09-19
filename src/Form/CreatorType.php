@@ -10,7 +10,6 @@ use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 
 class CreatorType extends AbstractType
 {
@@ -24,7 +23,7 @@ class CreatorType extends AbstractType
                 'constraints' => [
                     new File([
                         'maxSize' => '1024k',
-                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif',],
+                        'mimeTypes' => ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
                         'mimeTypesMessage' => 'Please upload a valid image file',
                     ])
                 ],

@@ -29,8 +29,12 @@
         </article>
         <aside class="flex flex-col gap-4 md:col-span-1">
             <div class="rounded-md p-4 mb-4 flex flex-col gap-4 border">
-                <a href="{{ path('app_profile') }}" class="flex items-center gap-2">
-                    <img src="{{ '/images/uploads/' ~ note.creator.image ?? 'default.png' }}" alt="{{ note.creator.username }}" class="inline-block h-10 w-10 rounded-full">
+                <a href="{{ path('app_note_user', { 'username': note.creator.username }) }}" class="flex items-center gap-2">
+                    <div 
+                        class="inline-block w-10 h-10 shadow-md rounded-full bg-cover bg-center"
+                        style="background-image: url('{{ '/images/uploads/' ~ note.creator.image ?? 'default/user.png' }}')"
+                    >
+                    </div>
                     <div class="flex flex-col gap-1">
                         <p class="text-xl font-bold">{{ note.creator.username }}</p>
                         <p class="text-sm text-slate-600">Member since {{ note.creator.createdAt|time_diff }} ago</p>
