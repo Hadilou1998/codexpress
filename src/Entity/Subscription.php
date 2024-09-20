@@ -38,7 +38,7 @@ class Subscription
     {
         $this->end_date = new \DateTimeImmutable('+30 days');
     }
-
+    
     #[ORM\PrePersist]
     public function setCreatedAtValue(): void
     {

@@ -16,6 +16,17 @@ class SubscriptionRepository extends ServiceEntityRepository
         parent::__construct($registry, Subscription::class);
     }
 
+    public function findByCreator(int $id): array
+    {
+        return $this->createQueryBuilder('s')
+            ->where('s.creator = :id')
+            ->setParameter('id', $id)
+            ->orderBy('s.created_at', 'DESC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     //    /**
     //     * @return Subscription[] Returns an array of Subscription objects
     //     */

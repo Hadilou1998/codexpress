@@ -14,10 +14,12 @@ class Like
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'note')]
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?Note $note = null;
 
-    #[ORM\ManyToOne(inversedBy: 'creator')]
+    #[ORM\ManyToOne(inversedBy: 'likes')]
+    #[ORM\JoinColumn(nullable: false)]
     private ?User $creator = null;
 
     public function getId(): ?int

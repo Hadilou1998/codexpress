@@ -12,12 +12,8 @@
 <a href="{{ path('app_profile_edit')}}" data-tooltip="Edit your profile" class="p-2 rounded-md bg-slate-200 tooltip">
     {{ ux_icon('mdi:cog-outline', { 'class': 'h-6 w-6 text-neutral-600 hover:text-violet-600' }) }}
 </a>
-<a href="{{ path('app_note_user', { 'username': app.user.username })}}" class="transition-transform duration-200 ease-in-out bg-center bg-cover rounded-full shadow-md w-11 h-11 hover:scale-95"
-    style="background-image: url('{{ '/images/uploads/' ~ app.user.image ?? 'default.png' }}')">
-</a>
-<a href="https://127.0.0.1:8000/logout" class="p-1 border-2 rounded-md border-neutral-700">
-    {{ux_icon('mdi:logout',{'class':'h-6 w-6 text-neutral-600 hover:text-violet-600'})}}
-</a>
-<a href="{{path('app_profile',{'username':app.user.username ?? ''})}}" class="p-2 transition-transform duration-200 ease-in-out rounded-full shadow-md hover:scale-95">
-    <img src="https://avatar.iran.liara.run/public/25" alt="profile picture" width="32" class="rounded-full">
+<a  href="{{ path('app_note_user', { 'username': app.user.username })}}" 
+    class="w-10 h-10 bg-cover bg-center shadow-md rounded-full hover:scale-95 transition-transform duration-200 ease-in-out"
+    style="background-image: url('{{ '/images/uploads/' ~ app.user.image ?? 'default.png' }}')"
+>
 </a>
