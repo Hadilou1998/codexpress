@@ -45,7 +45,6 @@
         "symfony/ux-twig-component": "^2.19",
         "symfony/validator": "7.1.*",
         "symfony/web-link": "7.1.*",
-        "symfony/webpack-encore-bundle": "^2.1",
         "symfony/yaml": "7.1.*",
         "symfonycasts/tailwind-bundle": "^0.6.0",
         "symfonycasts/verify-email-bundle": "^1.17",
