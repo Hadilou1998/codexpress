@@ -31,6 +31,7 @@ class LikeButton
         }
         
         return $this->note->getLikes()->exists(function($key, Like $like) {
+            // L'utilisateur qui possède le like === l'utilisateur actuel
             return $like->getCreator() === $this->currentUser;
         });
     }

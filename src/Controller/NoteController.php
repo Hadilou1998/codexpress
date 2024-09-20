@@ -76,6 +76,7 @@ class NoteController extends AbstractController
             return $this->redirectToRoute('app_login');
         }
 
+        $note = new Note();
         $form = $this->createForm(NoteType::class); // Chargement du formulaire
         $form = $form->handleRequest($request); // Recuperation des données de la requête POST
 
