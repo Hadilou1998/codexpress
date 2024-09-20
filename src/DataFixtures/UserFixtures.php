@@ -22,9 +22,9 @@ class UserFixtures extends Fixture
         // Create admin user
         $admin = new User();
         $admin
-            ->setEmail('hello@codexpress.fr')
-            ->setUsername('admin')
-            ->setPassword($this->hasher->hashPassword($admin, 'admin'))
+            ->setEmail('kakarot@codexpress.fr')
+            ->setUsername('Kakarot93')
+            ->setPassword($this->hasher->hashPassword($admin, 'saiyan'))
             ->setRoles(['ROLE_ADMIN']);
         $manager->persist($admin);
         $this->addReference('user_admin', $admin);
