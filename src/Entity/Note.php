@@ -251,6 +251,7 @@ class Note
     /**
      * @return Collection<int, View>
      */
+
     public function getViews(): Collection
     {
         return $this->views;
