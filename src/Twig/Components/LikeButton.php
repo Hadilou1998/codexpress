@@ -30,7 +30,9 @@ class LikeButton
             return false;
         }
         
-        return $this->note->getLikes()->exists(function($key, Like $like) {
+        return $this->note // Note courante
+            ->getLikes() // Likes de la note courante
+            ->exists(function($key, Like $like) { // Check si l'utilisateur actuel possède un like
             // L'utilisateur qui possède le like === l'utilisateur actuel
             return $like->getCreator() === $this->currentUser;
         });
