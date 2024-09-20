@@ -1,11 +1,12 @@
-<nav class="flex justify-between items-center bg-slate-50 p-2">
+<nav class="flex items-center justify-between p-2 bg-slate-50">
 	<a href="{{ path('app_home') }}" class="flex items-center gap-1">
-		<img src="{{ asset('/img/logo_dark.svg') }}" alt="logo" class="rounded-full hover:scale-95 transition-transform duration-200 ease-in-out">
+		<img src="{{ asset('/img/logo_dark.svg') }}" alt="logo" class="transition-transform duration-200 ease-in-out rounded-full hover:scale-95">
 		<p class="hidden md:block">CodeXpress</p>
+		CodeXpress
 	</a>
-	<div class="flex justify-between items-center gap-4">
+	<div class="flex items-center justify-between gap-4">
 		{{ include('components/_partials/search.html.twig') }}
-        <div class="flex justify-between items-center gap-4 relative">
+        <div class="relative flex items-center justify-between gap-4">
             {% if app.user %}
 				{# User is logged in #}
 				{{ include('components/_partials/navbar-login.html.twig') }}
