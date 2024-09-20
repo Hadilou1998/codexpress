@@ -31,8 +31,10 @@ class NoteController extends AbstractController
     }
 
     #[Route('/n/{slug}', name: 'app_note_show', methods: ['GET'])]
-    public function show(string $slug, NoteRepository $nr): Response
-    {
+    public function show(string $slug, NoteRepository $nr, Request $request): Response
+    {   
+        dd($request);
+        
         $note = $nr->findOneBySlug($slug);
 
         if (!$note) {
