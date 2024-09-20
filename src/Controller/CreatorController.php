@@ -21,7 +21,7 @@ class CreatorController extends AbstractController
     public function profile(NoteRepository $noteRepository): Response
     {
         return $this->render('creator/profile.html.twig', [
-            'notes' => $noteRepository->findByUser($this->getUser()),
+            'notes' => $this->getUser()->getNotes(),
         ]);
     }
 
