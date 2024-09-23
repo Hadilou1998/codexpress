@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Email;
 
@@ -15,7 +16,7 @@ class EmailNotificationService
     public function sendEmail(string $receiver): ?string
     {
         try {
-            $email = (new Email())
+            $email = (new TemplatedEmail())
                 ->from('kakarot@codexpress.fr')
                 ->to($receiver)
                 //->cc('cc@example.com')
@@ -23,10 +24,10 @@ class EmailNotificationService
                 //->replyTo('fabien@example.com')
                 //->priority(Email::PRIORITY_HIGH)
                 ->subject('Time for Symfony Mailer!')
-                ->text('Sending emails is fun again!')
-                ->html('<p>See Twig integration for better HTML integration!</p>');
+                ->htmlTemplate('email/base.html.twig');
+
             $this->mailer->send($email);
-            return 'Email sent successfully';
+            return 'Email was successfully sent!';
         } catch (\Exception $e) {
             return 'An error occurred while sending the email: ' . $e->getMessage();
         }
