@@ -12,12 +12,12 @@
 
         {% if app.user %}
             <div class="relative px-4 py-3 mb-4 text-green-700 bg-green-100 border border-green-400 rounded" role="alert">
-                {{ 'You are logged in as'|trans() }} {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="font-bold">Logout</a>
+                {{ 'You are logged in as'|trans() }} {{ app.user.userIdentifier }}, <a href="{{ path('app_logout') }}" class="font-bold">{{ 'Logout'|trans() }}</a>
             </div>
         {% endif %}
 
         <header class="mb-4 text-center">
-            <h1 class="mb-4 text-4xl font-bold md:text-5xl">Welcome back</h1>
+            <h1 class="mb-4 text-4xl font-bold md:text-5xl">{{ 'Welcome back'|trans() }}</h1>
             <p class="mb-4 text-slate-600">
                 {{ 'Sign in to access your notes and continue coding.'|trans() }}
             </p>
