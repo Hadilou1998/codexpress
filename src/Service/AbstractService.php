@@ -2,13 +2,18 @@
 
 namespace App\Service;
 
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 abstract class AbstractService
 {
+
     public function __construct(
-        protected ParameterBagInterface $parameterBag,
-        protected MailerInterface $mailer
-    ) {}
+        protected ParameterBagInterface $parameter, 
+        protected MailerInterface $mailer)
+    {
+        $this->parameter = $parameter;
+        $this->mailer = $mailer;
+
+    }
 }

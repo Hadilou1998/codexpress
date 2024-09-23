@@ -29,12 +29,12 @@ class LikeButton
         if (!$this->currentUser) {
             return false;
         }
-        
+
         return $this->note // Note courante
             ->getLikes() // Likes de la note courante
-            ->exists(function($key, Like $like) { // Check si l'utilisateur actuel possède un like
-            // L'utilisateur qui possède le like === l'utilisateur actuel
-            return $like->getCreator() === $this->currentUser;
-        });
+            ->exists(function ($key, Like $like) { // Check si l'utilisateur courant possède un Like
+                // User qui possede le Like === User courant
+                return $like->getCreator() === $this->currentUser;
+            });
     }
 }

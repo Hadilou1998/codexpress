@@ -18,7 +18,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 class CreatorController extends AbstractController
 {
     #[Route('/profile', name: 'app_profile', methods: ['GET'])]
-    public function profile(NoteRepository $noteRepository): Response
+    public function profile(): Response
     {
         return $this->render('creator/profile.html.twig', [
             'notes' => $this->getUser()->getNotes(),
