@@ -20,7 +20,7 @@
             $this->parameter = $parameter;
             $this->offer = $or->findOneByName('Premium'); // Récupération de l'offre Premium
             $this->apiKey = $this->parameter->get('STRIPE_API_SK');
-            $this->domain = 'https://127.0.0.1:8000'; // Adresse du domaine
+            $this->domain = 'https://127.0.0.1:8000/en'; // Adresse du domaine
         }
 
         /**
