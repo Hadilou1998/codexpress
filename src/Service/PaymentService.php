@@ -8,10 +8,11 @@ use App\Repository\OfferRepository;
 use App\Service\AbstractService;
 use Stripe\Checkout\Session;
 
-class Payment extends AbstractService
+class PaymentService extends AbstractService
 {
     private $offer; // Offre Premium
     private $domain = 'http://localhost:8000'; // Adresse du domaine
+    private $apiKey; // Clé API Stripe
 
     public function __construct(private Stripe $stripe, OfferRepository $or)
     {
@@ -27,7 +28,7 @@ class Payment extends AbstractService
         
         $checkoutSession = Session::create([
             'line_items' => [[
-                'price' => $this->offer->getPrice() * 100,
+                'unit_amount' => $this->offer->getPrice() * 100,
                 'quantity' => 1,
             ]],
             'mode' => 'payment',

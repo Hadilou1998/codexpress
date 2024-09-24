@@ -5,11 +5,30 @@
 {% block body %}
     <h1>Subscription</h1>
     <table class="table">
-        <tbody>
+        <thead>
             <tr>
-                <th>Id</th>
+                <th>Id</th> 
+                <th>Name</th>
+                <th>Price</th>
+                <th>Description</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subscription in subscriptions %}
+            <tr>
                 <td>{{ subscription.id }}</td>
+                <td>{{ subscription.name }}</td>
+                <td>{{ subscription.price }}</td>
+                <td>{{ subscription.description }}</td>
+                <a href="{{ path('subscription_show', {'id': subscription.id}) }}">show</a>
+                <a href="{{ path('subscription_edit', {'id': subscription.id}) }}">edit</a>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
             </tr>
         </tbody>
+    {% endfor %}
     </table>
 {% endblock %}

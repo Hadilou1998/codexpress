@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Service\PaymentService;
 
 class SubscriptionController extends AbstractController
 {
@@ -21,10 +22,12 @@ class SubscriptionController extends AbstractController
     }
 
     #[Route('/subscription', name: 'app_subscription')]
-    public function index(): Response
+    public function index(PaymentService $ps): Response
     {
-        return $this->render('subscription/index.html.twig', [
-            'controller_name' => 'SubscriptionController',
-        ]);
+        header('Content-Type: application/json'); // Définition du type de contenu de la requête
+        return $this->json($ps->askCheckout()); // templates/subscription/index.html.twig
+        header('HTTP/1.1 200 OK'); // Définition du code de réponse
+        header('location: ' . $ps->askCheckout()->url); // Redirection vers la page de paiement
+        return $this->render('subscription/index.html.twig');
     }
 }
