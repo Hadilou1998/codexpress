@@ -2,35 +2,37 @@
 
 namespace App\Service;
 
+use Stripe\Stripe;
 use App\Entity\Subscription;
 use App\Repository\OfferRepository;
-use Stripe\Stripe;
+use App\Service\AbstractService;
 use Stripe\Checkout\Session;
 
 class Payment extends AbstractService
 {
-    private string $apiKey;
-    private $offer;
+    private $offer; // Offre Premium
+    private $domain = 'http://localhost:8000'; // Adresse du domaine
 
     public function __construct(private Stripe $stripe, OfferRepository $or)
     {
-        $this->offer = $or->findOneByName('Premium');
+        $this->offer = $or->findOneByName('Premium'); // Récupération de l'offre Premium
     }
 
     // Générer une demande de paiement
     public function askCheckout(): ?Subscription
     {
-        $domain = 'http://localhost:8000';
-        // Emission de la demande à Stripe
+        Stripe::setApiKey($this->parameter->get('STRIPE_API_KEY')); // Etablissement de la connexion (API)
+
+        header('Content-Type: application/json'); // Définition du type de contenu de la requête
+        
         $checkoutSession = Session::create([
             'line_items' => [[
-                # Provide the exact Price ID (e.g. pr_1234) of the product you want to sell
                 'price' => $this->offer->getPrice() * 100,
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
-            'success_url' => $domain . '/success.html',
-            'cancel_url' => $domain . '/cancel.html',
+            'success_url' => $this->domain . '/success.html',
+            'cancel_url' => $this->domain . '/cancel.html',
             'automatic_tax' => [
                 'enabled' => true
             ],
