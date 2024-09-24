@@ -1,33 +1,49 @@
 <?php
 
-namespace App\Controller;
+    namespace App\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use App\Service\PaymentService;
+    use App\Service\PaymentService;
+    use Stripe\Forwarding\Request;
+    use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+    use Symfony\Component\HttpFoundation\RedirectResponse;
+    use Symfony\Component\HttpFoundation\Response;
+    use Symfony\Component\Routing\Attribute\Route;
 
-class SubscriptionController extends AbstractController
-{
-    #[Route('/payment-success', name: 'app_payment_success')]
-    public function paymentSuccess(): Response
+    class SubscriptionController extends AbstractController
     {
-        return $this->render('subscription/payment-success.html.twig');
+        // Route lorsque le paiement est réussi
+        #[Route('/payment-success', name: 'app_payment_success')]
+        public function paymentSuccess(Request $request): Response
+        {
+            return $this->render('subscription/payment-success.html.twig');
+        }
+        
+        // Route lorsque le paiement a échoué
+        #[Route('/payment-cancel', name: 'app_payment_cancel')]
+        public function paymentCancel(): Response
+        {
+            return $this->render('subscription/payment-cancel.html.twig');
+        }
+        
+        // Page de présentation de l'abonnement Premium
+        #[Route('/subscription/', name: 'app_subscription', methods: ['GET'])]
+        public function index(): Response
+        {
+            return $this->render('subscription/index.html.twig');
+        }
+
+        /**
+         * Redirection vers le paiement Stripe
+         * Ici on utilise la classe RedirectResponse de HttpFoundation
+         * Cela nous donne accès à la méthos redirect qui génère la requête
+         * à partir de la session initié avec PaymentService->askCheckout()
+         */
+        // Redirection vers le paiement Stripe
+        #[Route('/subscription/checkout', name: 'app_subscription_checkout', methods: ['GET'])]
+        public function checkout(PaymentService $ps): RedirectResponse
+        {
+            return $this->redirect($ps->askCheckout()->url);
+        }
     }
 
-    #[Route('/payment-cancel', name: 'app_payment_cancel')]
-    public function paymentCancel(): Response
-    {
-        return $this->render('subscription/payment-cancel.html.twig');
-    }
-
-    #[Route('/subscription', name: 'app_subscription')]
-    public function index(PaymentService $ps): Response
-    {
-        header('Content-Type: application/json'); // Définition du type de contenu de la requête
-        return $this->json($ps->askCheckout()); // templates/subscription/index.html.twig
-        header('HTTP/1.1 200 OK'); // Définition du code de réponse
-        header('location: ' . $ps->askCheckout()->url); // Redirection vers la page de paiement
-        return $this->render('subscription/index.html.twig');
-    }
-}
+?>

@@ -3,10 +3,10 @@
 namespace App\Service;
 
 use Stripe\Stripe;
-use App\Entity\Subscription;
 use App\Repository\OfferRepository;
 use App\Service\AbstractService;
 use Stripe\Checkout\Session;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class PaymentService extends AbstractService
 {
@@ -14,21 +14,29 @@ class PaymentService extends AbstractService
     private $domain = 'http://localhost:8000'; // Adresse du domaine
     private $apiKey; // Clé API Stripe
 
-    public function __construct(private Stripe $stripe, OfferRepository $or)
+    public function __construct(private Stripe $stripe, private RedirectResponse $redirectResponse, OfferRepository $or)
     {
         $this->offer = $or->findOneByName('Premium'); // Récupération de l'offre Premium
     }
 
+    /**
+     * askCheckout()
+     * Méthode permettant de créer une session de paiement Stripe
+     * @return Stripe\Checkout\Session
+     */
     // Générer une demande de paiement
-    public function askCheckout(): ?Subscription
+    public function askCheckout(): ?Session
     {
-        Stripe::setApiKey($this->parameter->get('STRIPE_API_KEY')); // Etablissement de la connexion (API)
-
-        header('Content-Type: application/json'); // Définition du type de contenu de la requête
-        
+        Stripe::setApiKey($this->apiKey); // Définition de la clé API Stripe
         $checkoutSession = Session::create([
             'line_items' => [[
-                'unit_amount' => $this->offer->getPrice() * 100,
+                'price_data' => [
+                    'currency' => 'eur',
+                    'unit_amount' => $this->offer->getPrice() * 100, // Stripe utilise des centimes
+                    'product_data' => [ // Les informations du produit sont personnalisables
+                        'name' => $this->offer->getName(),
+                    ],  
+                ],
                 'quantity' => 1,
             ]],
             'mode' => 'payment',
@@ -38,7 +46,8 @@ class PaymentService extends AbstractService
                 'enabled' => true
             ],
         ]);
-        return 'OK'; // templates/subscription/index.html.twig
+        
+        return $checkoutSession;
     }
 
     // Traitement du role des utilisateurs
