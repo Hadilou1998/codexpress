@@ -5,12 +5,7 @@
 {% block body %}
     <h1>Payment Cancel</h1>
     <p>Your payment was canceled.</p>
-
-    <p>Your payment ID is: {{ paymentId }}</p>
-    <p>Your payment amount is: {{ amount }}</p>
-    <p>Your payment currency is: {{ currency }}</p>
-    <p>Your payment status is : {{ status }}</p>
-    <p>Your payment date is: {{ date }}</p>
-    <p>Your payment description is: {{ description }}</p>
+    <a href="{{ path('app_subscription') }}">Back to Subscriptions</a>
+    <a href="{{ path('app_home') }}">Back to Home</a>
 
 {% endblock %}
