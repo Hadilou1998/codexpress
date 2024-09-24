@@ -7,7 +7,7 @@ use Symfony\Component\Mime\Email;
 
 class EmailNotificationService extends AbstractService
 {
-    public function sendEmail(string $receiver, string $case): ?string
+    public function sendEmail(string $receiver, array $case): ?string
     {
         try {
             $email = (new TemplatedEmail())

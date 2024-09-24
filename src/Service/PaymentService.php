@@ -16,8 +16,8 @@
 
         public function __construct(
             private ParameterBagInterface $parameter,
-            private OfferRepository $or,
-            private readonly Security $security,
+             OfferRepository $or,
+             Security $security,
             private EntityManagerInterface $em
         ) {
             $this->offer = $or->findOneByName('Premium'); // Récupération de l'offre Premium
@@ -70,9 +70,8 @@
                 $this->em->persist($subscription);
                 $this->em->flush();
             
-            $userRoles = $this->user->getRoles();
-            $userRoles[] = 'ROLE_PREMIUM';
-            $this->user->setRoles($userRoles);
+         
+            $this->user->setRoles(['ROLE_PREMIUM']);
             $this->em->persist($this->user);
             $this->em->flush();
 
