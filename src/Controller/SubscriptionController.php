@@ -19,12 +19,4 @@ class SubscriptionController extends AbstractController
     {
         return $this->render('subscription/payment-cancel.html.twig');
     }
-
-    #[Route('/subscription', name: 'app_subscription')]
-    public function index(): Response
-    {
-        return $this->render('subscription/index.html.twig', [
-            'controller_name' => 'SubscriptionController',
-        ]);
-    }
 }
