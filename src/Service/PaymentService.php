@@ -44,8 +44,8 @@
                     'quantity' => 1,
                 ]],
                 'mode' => 'payment',
-                'success_url' => $this->domain . '/success.html',
-                'cancel_url' => $this->domain . '/cancel.html',
+                'success_url' => $this->domain . '/payment-success',
+                'cancel_url' => $this->domain . '/payment-cancel',
                 'automatic_tax' => [
                     'enabled' => false
                 ],
