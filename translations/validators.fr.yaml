@@ -147,6 +147,6 @@ Error: Erreur
 'Please select a valid option.': 'Veuillez sélectionner une option valide.'
 'Please select a valid range.': 'Veuillez sélectionner une plage valide.'
 'Please enter a valid week.': 'Veuillez entrer une semaine valide.'
-'Please upload a valid image file': '__Please upload a valid image file'
 'Please enter a password': '__Please enter a password'
 'Your password should be at least {{ limit }} characters': '__Your password should be at least {{ limit }} characters'
+'Please upload a valid image file': '__Please upload a valid image file'
