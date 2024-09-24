@@ -10,7 +10,7 @@
                 class="inline-block bg-center bg-cover rounded-full shadow-md w-36 h-36"
                 style="background-image: url('{{ '/images/uploads/' ~ app.user.image ?? 'default.png' }}')"
             >#}
-                <img src="{{ '/images/uploads/' ~ app.user.image ?? 'default.png' }}" alt="{{ app.user.username }}" width="150" height="150" class="rounded-full shadow-md w-36 h-36">
+                <img src="{{ '/images/uploads/' ~ app.user.image ?? 'default.png' }}" alt="{{ app.user.username }}" width="150" height="150" class="inline-block bg-center bg-cover rounded-full shadow-md w-36 h-36">
             {#</div>#}
             <ul class="flex justify-center gap-4 my-5">
                 {% for item in app.user.networks %}
