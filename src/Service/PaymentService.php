@@ -55,6 +55,9 @@
         }
 
         // Traitement du role des utilisateurs
+        public function addSubscription(): void
+        {
+        }
 
         // Génération de la facture
 
