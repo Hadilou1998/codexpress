@@ -2,7 +2,8 @@
 
     namespace App\Controller;
 
-    use App\Service\PaymentService;
+use App\Service\EmailNotificationService;
+use App\Service\PaymentService;
     use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
     use Symfony\Component\HttpFoundation\RedirectResponse;
     use Symfony\Component\HttpFoundation\Request;
@@ -12,16 +13,28 @@
     class SubscriptionController extends AbstractController
     {
         // Route lorsque le paiement est réussi
-        #[Route('/payment-success', name: 'app_payment_success')]
-        public function paymentSuccess(Request $request): Response
+        #[Route('/payment-success', name: 'app_payment_success', methods: ['GET'])]
+        public function paymentSuccess(Request $request, PaymentService $ps, EmailNotificationService $ens): Response
         {
             if ($request->headers->get('referer') === 'https://checkout.stripe.com/') 
             {
-                return $this->render('subscription/payment-success.html.twig');
+                $subscription = $ps->addSubscription();
+                $ens->sendEmail(
+                    $this->getUser()->getEmail(), 
+                    [
+                        'subject' => 'Thank you for your purchase!', 
+                        'template' => 'premium',
+                    ]
+                );
+                return $this->render('subscription/payment-success.html.twig', [
+                    'subscription' => $subscription,
+                ]);
             } else {
                 $this->addFlash('error', 'You can\'t take the subscription without a payment.');
                 return $this->redirectToRoute('app_subscription');
-            }      
+            }
+            
+            return $this->render('subscription/payment-success.html.twig');
         }
         
         // Route lorsque le paiement a échoué
