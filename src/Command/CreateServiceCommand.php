@@ -86,6 +86,8 @@ EOT;
 
 namespace App\Service;
 
+use App\Service\AbstractService;
+
 class $serviceName extends AbstractService
 {
     // Add your service methods here
