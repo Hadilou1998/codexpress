@@ -3,9 +3,11 @@
 {% block title %}Payment Cancel{% endblock %}
 
 {% block body %}
-    <h1>Payment Cancel</h1>
-    <p>Your payment was canceled.</p>
-    <a href="{{ path('app_subscription') }}">Back to Subscriptions</a>
-    <a href="{{ path('app_home') }}">Back to Home</a>
-
+    <div class="h-screen max-w-screen-lg px-10 mx-auto text-center">
+        <h3>{{ 'Your payment has been declined'|trans }}</h3>
+        <p class="text-slate-600">{{ 'You can still access the premium features of CodeXpress'|trans }}</p>
+        <a href="{{ path('app_subscription_checkout') }}" class="self-end px-3 py-2 transition-all duration-200 ease-in-out rounded-md bg-violet-100 hover:bg-violet-200 w-fit">
+            {{ 'Try again'|trans }}
+        </a>
+    </div>
 {% endblock %}

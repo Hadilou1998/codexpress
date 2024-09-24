@@ -69,7 +69,6 @@
                 ;
                 $this->em->persist($subscription);
                 $this->em->flush();
-            
          
             $this->user->setRoles(['ROLE_PREMIUM']);
             $this->em->persist($this->user);
