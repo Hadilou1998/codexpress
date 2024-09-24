@@ -47,7 +47,7 @@
                 'success_url' => $this->domain . '/payment-success',
                 'cancel_url' => $this->domain . '/payment-cancel',
                 'automatic_tax' => [
-                    'enabled' => false
+                    'enabled' => true,
                 ],
             ]);
             

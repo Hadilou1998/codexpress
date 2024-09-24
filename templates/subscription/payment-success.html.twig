@@ -5,5 +5,13 @@
 {% block body %}
     <h1>Payment Success</h1>
     <p>Thank you for your payment!</p>
-    <a href="{{ path('app_subscription') }}">Back to Subscription</a>
+
+    <p>Your payment was successful.</p>
+    <p>Your payment ID is: {{ paymentId }}</p>
+    <p>Your payment amount is: {{ amount }}</p>
+    <p>Your payment currency is: {{ currency }}</p>
+    <p>Your payment status is: {{ status }}</p>
+    <p>Your payment date is: {{ date }}</p>
+    <p>Your payment description is: {{ description }}</p>
+
 {% endblock %}
