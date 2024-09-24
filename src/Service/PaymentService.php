@@ -3,20 +3,24 @@
     namespace App\Service;
 
     use Stripe\Stripe;
-    use App\Repository\OfferRepository;
-    use App\Service\AbstractService;
+    use App\Entity\Subscription;
     use Stripe\Checkout\Session;
-    use Symfony\Component\HttpFoundation\RedirectResponse;
+    use App\Service\AbstractService;
+    use App\Repository\OfferRepository;
+    use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
-    class PaymentService extends AbstractService
+    class PaymentService
     {
         private $offer; // Offre Premium
         private $domain = 'http://localhost:8000'; // Adresse du domaine
-        private $apiKey; // Clé API Stripe
+        private $apiKey;
 
-        public function __construct(private Stripe $stripe, private RedirectResponse $redirectResponse, OfferRepository $or)
+        public function __construct(private ParameterBagInterface $parameter, OfferRepository $or)
         {
+            $this->parameter = $parameter;
             $this->offer = $or->findOneByName('Premium'); // Récupération de l'offre Premium
+            $this->apiKey = $this->parameter->get('STRIPE_API_SK');
+            $this->domain = 'https://127.0.0.1:8000'; // Adresse du domaine
         }
 
         /**
@@ -43,7 +47,7 @@
                 'success_url' => $this->domain . '/success.html',
                 'cancel_url' => $this->domain . '/cancel.html',
                 'automatic_tax' => [
-                    'enabled' => true
+                    'enabled' => false
                 ],
             ]);
             
@@ -56,5 +60,5 @@
 
         // Notifications des emails
     }
-    
+
 ?>

@@ -26,7 +26,7 @@
         }
         
         // Page de présentation de l'abonnement Premium
-        #[Route('/subscription/', name: 'app_subscription', methods: ['GET'])]
+        #[Route('/subscription', name: 'app_subscription', methods: ['GET'])]
         public function index(): Response
         {
             return $this->render('subscription/index.html.twig');
