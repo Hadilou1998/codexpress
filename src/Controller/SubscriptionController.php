@@ -15,14 +15,26 @@
         #[Route('/payment-success', name: 'app_payment_success')]
         public function paymentSuccess(Request $request): Response
         {
-            return $this->render('subscription/payment-success.html.twig');
+            if ($request->headers->get('referer') === 'https://checkout.stripe.com/') 
+            {
+                return $this->render('subscription/payment-success.html.twig');
+            } else {
+                $this->addFlash('error', 'You can\'t take the subscription without a payment.');
+                return $this->redirectToRoute('app_subscription');
+            }      
         }
         
         // Route lorsque le paiement a échoué
         #[Route('/payment-cancel', name: 'app_payment_cancel')]
-        public function paymentCancel(): Response
+        public function paymentCancel(Request $request): Response
         {
-            return $this->render('subscription/payment-cancel.html.twig');
+            if ($request->headers->get('referer') === 'https://checkout.stripe.com/') 
+            {
+                return $this->render('subscription/payment-cancel.html.twig');
+            } else {
+                $this->addFlash('error', 'You can\'t take the subscription without a payment.');
+                return $this->redirectToRoute('app_subscription');
+            }
         }
         
         // Page de présentation de l'abonnement Premium
